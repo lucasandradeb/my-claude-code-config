@@ -4,6 +4,26 @@
 
 ---
 
+## Caminhos de Configuração por Sistema Operacional
+
+Este documento usa caminhos que variam dependendo do seu sistema operacional:
+
+| Item | Linux/Mac | Windows |
+|------|-----------|---------|
+| **Diretório Claude** | `~/.claude/` | `%USERPROFILE%\.claude\` ou `C:\Users\SeuUsuario\.claude\` |
+| **CLAUDE.md** | `~/.claude/CLAUDE.md` | `%USERPROFILE%\.claude\CLAUDE.md` |
+| **Settings** | `~/.claude/settings.json` | `%USERPROFILE%\.claude\settings.json` |
+| **Plugins** | `~/.claude/plugins/` | `%USERPROFILE%\.claude\plugins\` |
+
+**Nota:** No Windows, você pode usar:
+- **PowerShell:** `$env:USERPROFILE\.claude\`
+- **CMD:** `%USERPROFILE%\.claude\`
+- **Git Bash:** `~/.claude/` (funciona como no Linux/Mac)
+
+Ao longo deste documento, quando você ver comandos, procure pela seção correspondente ao seu sistema operacional.
+
+---
+
 ## MCP Servers Ativos
 
 ### 1. GitHub MCP Server
@@ -166,7 +186,10 @@ Diferente de ferramentas de busca simples, Serena entende a SEMÂNTICA do códig
 
 ## Arquivo CLAUDE.md Global
 
-**Localização:** `~/.claude/CLAUDE.md`
+**Localização:**
+- **Linux/Mac:** `~/.claude/CLAUDE.md`
+- **Windows:** `%USERPROFILE%\.claude\CLAUDE.md` (ou `C:\Users\SeuUsuario\.claude\CLAUDE.md`)
+
 **Status:** Configurado
 **Versão:** 1.0.0
 
@@ -243,6 +266,8 @@ Este arquivo é carregado automaticamente em TODAS as conversas com o Claude Cod
 ## Comandos Úteis
 
 ### Verificar Configurações
+
+**Linux/Mac:**
 ```bash
 # Ver CLAUDE.md
 cat ~/.claude/CLAUDE.md
@@ -254,8 +279,31 @@ cat ~/.claude/settings.json
 ls -la ~/.claude/plugins/cache/claude-code-plugins/
 ```
 
+**Windows (PowerShell):**
+```powershell
+# Ver CLAUDE.md
+Get-Content $env:USERPROFILE\.claude\CLAUDE.md
+
+# Ver settings
+Get-Content $env:USERPROFILE\.claude\settings.json
+
+# Ver plugins instalados
+Get-ChildItem $env:USERPROFILE\.claude\plugins\cache\claude-code-plugins\
+```
+
+**Windows (Git Bash/CMD):**
+```bash
+# Ver CLAUDE.md
+type %USERPROFILE%\.claude\CLAUDE.md
+
+# Ver settings
+type %USERPROFILE%\.claude\settings.json
+```
+
 ### Testar MCP Servers
 ```bash
+# Funciona em todas as plataformas (Windows, Linux, Mac)
+
 # Testar Memory server manualmente
 npx -y @modelcontextprotocol/server-memory
 
@@ -264,12 +312,23 @@ npx -y @modelcontextprotocol/server-memory
 ```
 
 ### Atualizar Configurações
+
+**Linux/Mac:**
 ```bash
 # Fazer backup
 cp ~/.claude/CLAUDE.md ~/.claude/CLAUDE.md.backup
 
 # Editar
 code ~/.claude/CLAUDE.md  # ou seu editor favorito
+```
+
+**Windows (PowerShell):**
+```powershell
+# Fazer backup
+Copy-Item $env:USERPROFILE\.claude\CLAUDE.md $env:USERPROFILE\.claude\CLAUDE.md.backup
+
+# Editar
+code $env:USERPROFILE\.claude\CLAUDE.md  # ou seu editor favorito
 ```
 
 ---
@@ -294,7 +353,9 @@ code ~/.claude/CLAUDE.md  # ou seu editor favorito
 ## Segurança e Privacidade
 
 ### Dados Locais
-- Todas as configurações ficam em `~/.claude/`
+- **Todas as configurações ficam em:**
+  - Linux/Mac: `~/.claude/`
+  - Windows: `%USERPROFILE%\.claude\`
 - Nenhum dado é enviado para servidores externos (exceto Claude API)
 - Memory server armazena dados localmente
 

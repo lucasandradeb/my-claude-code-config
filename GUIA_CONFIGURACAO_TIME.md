@@ -12,6 +12,29 @@
 
 ---
 
+## Nota sobre Caminhos (Importante!)
+
+Este guia contém comandos e caminhos que variam por sistema operacional. Procure sempre pela seção correspondente ao seu sistema:
+
+| Item | Linux | macOS | Windows |
+|------|-------|-------|---------|
+| **Diretório Claude** | `~/.claude/` | `~/.claude/` | `%USERPROFILE%\.claude\` |
+| **Home directory** | `/home/usuario` | `/Users/usuario` | `C:\Users\Usuario` |
+| **Shell padrão** | Bash | Bash/Zsh | PowerShell/CMD |
+
+**Convenções neste documento:**
+- Comandos marcados com **Linux/Mac** funcionam em ambos sistemas Unix
+- Comandos marcados com **Windows** são para PowerShell (recomendado)
+- Alguns comandos git, node e npm funcionam em todas as plataformas
+
+**Importante para Windows:**
+- Use `\` (barra invertida) em paths PowerShell
+- Use barras duplas `\\` em JSON strings: `"C:\\Users\\Nome"`
+- PowerShell: use `$env:USERPROFILE` para home directory
+- CMD: use `%USERPROFILE%` para home directory
+
+---
+
 ## Pré-requisitos
 
 Antes de começar, certifique-se de ter instalado:
@@ -75,7 +98,12 @@ MCP (Model Context Protocol) Servers são plugins que expandem as capacidades do
   "claude.mcpServers": {
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/Users/SEU_USUARIO"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/SEU_USUARIO"  // Mac/Linux: /Users/seuusuario ou /home/seuusuario
+                              // Windows: C:\\Users\\SeuUsuario
+      ],
       "env": {}
     },
     "github": {
@@ -104,10 +132,16 @@ MCP (Model Context Protocol) Servers são plugins que expandem as capacidades do
 }
 ```
 
-**IMPORTANTE:** Substitua:
-- `/Users/SEU_USUARIO` pelo seu diretório home
-- `SEU_TOKEN_AQUI` por um Personal Access Token do GitHub
-- `SUA_CHAVE_AQUI` por uma API key do Brave Search
+**IMPORTANTE:** Substitua os valores conforme seu sistema:
+
+**Diretório Home (filesystem server):**
+- **Linux:** `/home/seuusuario` (ex: `/home/joao`)
+- **Mac:** `/Users/seuusuario` (ex: `/Users/joao`)
+- **Windows:** `C:\\Users\\SeuUsuario` (ex: `C:\\Users\\Joao`) - **note as barras duplas!**
+
+**Tokens:**
+- `SEU_TOKEN_AQUI` → Personal Access Token do GitHub
+- `SUA_CHAVE_AQUI` → API key do Brave Search
 
 #### Opção B: Configuração via Claude Desktop App
 
@@ -168,7 +202,9 @@ Os plugins adicionam funcionalidades específicas ao Claude Code.
 
 #### Via Arquivo de Configuração
 
-Edite o arquivo `~/.claude/settings.json`:
+Edite o arquivo de configuração do Claude:
+- **Linux/Mac:** `~/.claude/settings.json`
+- **Windows:** `%USERPROFILE%\.claude\settings.json` (ou `C:\Users\SeuUsuario\.claude\settings.json`)
 
 ```json
 {
@@ -206,7 +242,9 @@ O arquivo CLAUDE.md contém instruções persistentes que o Claude seguirá em t
 ### Instalação
 
 1. Copie o arquivo `CLAUDE.md` deste repositório
-2. Coloque em: `~/.claude/CLAUDE.md`
+2. Coloque no diretório de configuração do Claude:
+   - **Linux/Mac:** `~/.claude/CLAUDE.md`
+   - **Windows:** `%USERPROFILE%\.claude\CLAUDE.md`
 
 Ou crie manualmente:
 
@@ -305,13 +343,20 @@ O Claude deve:
 **Problema:** Plugins instalados não funcionam.
 
 **Soluções:**
-1. Verifique o arquivo `~/.claude/settings.json`
+1. Verifique o arquivo de configuração:
+   - **Linux/Mac:** `~/.claude/settings.json`
+   - **Windows:** `%USERPROFILE%\.claude\settings.json`
 2. Reinstale os plugins:
    - Command Palette → "Claude: Uninstall Plugin"
    - Command Palette → "Claude: Install Plugin"
 3. Limpe o cache:
+   **Linux/Mac:**
    ```bash
    rm -rf ~/.claude/plugins/cache
+   ```
+   **Windows (PowerShell):**
+   ```powershell
+   Remove-Item -Recurse -Force $env:USERPROFILE\.claude\plugins\cache
    ```
 4. Reinicie o VSCode
 
@@ -320,8 +365,20 @@ O Claude deve:
 **Problema:** Claude não segue as instruções do CLAUDE.md.
 
 **Soluções:**
-1. Verifique o caminho: `~/.claude/CLAUDE.md` deve existir
-2. Verifique o conteúdo: `cat ~/.claude/CLAUDE.md`
+1. Verifique se o arquivo existe no local correto:
+   - **Linux/Mac:** `~/.claude/CLAUDE.md`
+   - **Windows:** `%USERPROFILE%\.claude\CLAUDE.md`
+
+2. Verifique o conteúdo:
+   **Linux/Mac:**
+   ```bash
+   cat ~/.claude/CLAUDE.md
+   ```
+   **Windows (PowerShell):**
+   ```powershell
+   Get-Content $env:USERPROFILE\.claude\CLAUDE.md
+   ```
+
 3. Inicie uma **nova conversa** (instruções são carregadas no início)
 4. Teste explicitamente pedindo para seguir as diretrizes
 
@@ -425,6 +482,7 @@ Depois reinicie o VSCode.
 
 Mantenha o arquivo versionado em um repositório Git interno do time:
 
+**Linux/Mac:**
 ```bash
 # Clone o repositório de configurações do time
 git clone https://github.com/seu-time/claude-config.git
@@ -436,6 +494,20 @@ cp claude-config/CLAUDE.md ~/.claude/CLAUDE.md
 cd claude-config
 git pull
 cp CLAUDE.md ~/.claude/CLAUDE.md
+```
+
+**Windows (PowerShell):**
+```powershell
+# Clone o repositório de configurações do time
+git clone https://github.com/seu-time/claude-config.git
+
+# Copie para seu diretório local
+Copy-Item claude-config\CLAUDE.md $env:USERPROFILE\.claude\CLAUDE.md
+
+# Para atualizar no futuro
+cd claude-config
+git pull
+Copy-Item CLAUDE.md $env:USERPROFILE\.claude\CLAUDE.md
 ```
 
 ---
