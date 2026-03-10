@@ -141,23 +141,23 @@ Diferente de ferramentas de busca simples, Serena entende a SEMÂNTICA do códig
 
 ## Plugins Instalados
 
-### 1. Code Review Plugin
+### 1. Superpowers Plugin
 **Status:** Ativo
-**Versão:** 1.0.0
-**Função:** Melhorias para code review
-**Comando:** `/code-review` ou `/review-pr`
+**Identificador:** `superpowers@claude-plugins-official`
+**Função:** Framework central de produtividade
 
 **O que faz:**
-- Análise detalhada de pull requests
-- Identifica problemas de segurança
-- Verifica padrões de código
-- Sugere melhorias
+- Estrutura todos os fluxos de trabalho com disciplina
+- Skills: `/brainstorm`, `/writing-plans`, `/executing-plans`
+- Skills: `/systematic-debugging`, `/test-driven-development`
+- Skills: `/verification-before-completion`, `/requesting-code-review`
+- Skills: `/dispatching-parallel-agents`, `/finishing-a-development-branch`
 
 ---
 
 ### 2. Explanatory Output Style Plugin
 **Status:** Ativo
-**Versão:** 1.0.0
+**Identificador:** `explanatory-output-style@claude-code-plugins`
 **Função:** Modo de saída educacional
 
 **O que faz:**
@@ -170,17 +170,120 @@ Diferente de ferramentas de busca simples, Serena entende a SEMÂNTICA do códig
 
 ---
 
-### 3. Frontend Design Plugin
+### 3. Serena Plugin
 **Status:** Ativo
-**Versão:** 1.0.0
+**Identificador:** `serena@claude-plugins-official`
+**Função:** Análise semântica eficiente de código
+
+**O que faz:**
+- Instrui o Claude a usar o Serena MCP Server de forma eficiente
+- Leitura incremental por símbolos (evita ler arquivos inteiros)
+- Edição a nível de símbolo (classes, métodos, funções)
+- Economiza tokens em análises de codebase
+
+---
+
+### 4. Context7 Plugin
+**Status:** Ativo
+**Identificador:** `context7@claude-plugins-official`
+**Função:** Documentação atualizada de bibliotecas
+
+**O que faz:**
+- Busca docs de qualquer biblioteca por nome
+- Supera o knowledge cutoff para libs em evolução rápida
+- Garante exemplos corretos para Next.js, React, Drizzle, etc.
+
+---
+
+### 5. Code Review Plugin
+**Status:** Ativo
+**Identificador:** `code-review@claude-plugins-official`
+**Função:** Revisão estruturada de pull requests
+**Comando:** `/code-review` ou `/review-pr`
+
+**O que faz:**
+- Análise detalhada de pull requests por categorias
+- Identifica problemas de segurança, performance e legibilidade
+- Verifica cobertura de testes
+- Sugere melhorias com referência de linha
+
+---
+
+### 6. Frontend Design Plugin
+**Status:** Ativo
+**Identificador:** `frontend-design@claude-plugins-official`
 **Função:** Assistente especializado em UI
 **Comando:** `/frontend-design`
 
 **O que faz:**
 - Cria interfaces com alta qualidade visual
-- Evita designs genéricos
+- Evita estética genérica de código gerado por IA
 - Gera código frontend polido e profissional
-- Especializado em React, Vue, e CSS moderno
+- Acessibilidade (ARIA), dark mode e responsividade por padrão
+
+---
+
+### 7. GitHub Plugin
+**Status:** Ativo
+**Identificador:** `github@claude-plugins-official`
+**Função:** Workflows estruturados com GitHub
+
+**O que faz:**
+- Workflows inteligentes para criação de PRs
+- Análise de issues e planejamento de implementação
+- Complementa o GitHub MCP Server com comportamentos estruturados
+
+---
+
+### 8. Feature Dev Plugin
+**Status:** Ativo
+**Identificador:** `feature-dev@claude-plugins-official`
+**Função:** Desenvolvimento guiado de features
+**Comando:** `/feature-dev`
+
+**O que faz:**
+- Explora codebase antes de implementar (subagente `code-explorer`)
+- Desenha arquitetura antes de codar (subagente `code-architect`)
+- Revisa implementação ao final (subagente `code-reviewer`)
+
+---
+
+### 9. Code Simplifier Plugin
+**Status:** Ativo
+**Identificador:** `code-simplifier@claude-plugins-official`
+**Função:** Simplificação e limpeza de código
+**Comando:** `/simplify`
+
+**O que faz:**
+- Revisa código recém-escrito para clareza e manutenibilidade
+- Identifica duplicações e abstrações desnecessárias
+- Verifica consistência com padrões do codebase
+
+---
+
+### 10. Claude MD Management Plugin
+**Status:** Ativo
+**Identificador:** `claude-md-management@claude-plugins-official`
+**Função:** Gestão de arquivos CLAUDE.md
+**Comandos:** `/revise-claude-md`, `/claude-md-improver`
+
+**O que faz:**
+- Audita qualidade de CLAUDE.md em repositórios
+- Atualiza instruções com aprendizados da sessão
+- Mantém a "memória de longo prazo" do projeto atualizada
+
+---
+
+### 11. Claude Code Setup Plugin
+**Status:** Ativo
+**Identificador:** `claude-code-setup@claude-plugins-official`
+**Função:** Recomendação de automações do Claude Code
+**Comando:** `/claude-automation-recommender`
+
+**O que faz:**
+- Analisa codebase e recomenda hooks, plugins e MCP servers
+- Lista priorizada de configurações com justificativas
+- Ideal ao iniciar Claude Code em um novo projeto
 
 ---
 
@@ -242,8 +345,7 @@ Este arquivo é carregado automaticamente em TODAS as conversas com o Claude Cod
 - Memória persistente entre conversas
 - Análise semântica de código (Serena)
 - Padrões de código aplicados automaticamente
-- Modo educacional ativo
-- Plugins para code review e frontend
+- 11 plugins ativos: fluxos disciplinados, modo educacional, docs atualizadas, code review, frontend especializado e mais
 
 ---
 
@@ -252,8 +354,9 @@ Este arquivo é carregado automaticamente em TODAS as conversas com o Claude Cod
 ### Para Você
 1. Teste as ferramentas em um projeto real
 2. Configure tokens faltantes (GitHub, Brave) se ainda não fez
-3. Experimente o comando `/code-review` em um PR
+3. Experimente `/review-pr` em um PR e `/feature-dev` em uma nova feature
 4. Use o Memory server para documentar decisões importantes
+5. Use `/claude-automation-recommender` em um novo projeto para configuração otimizada
 
 ### Para o Time
 1. Compartilhe o arquivo `GUIA_CONFIGURACAO_TIME.md`
@@ -371,5 +474,5 @@ code $env:USERPROFILE\.claude\CLAUDE.md  # ou seu editor favorito
 
 ---
 
-**Gerado em:** 06/02/2026
+**Gerado em:** 10/03/2026
 **Válido até:** Próxima atualização de configuração

@@ -438,7 +438,7 @@ O Memory Server cria um **Knowledge Graph** (grafo de conhecimento) estruturado:
 
 ## Plugins - Especializações do Claude
 
-**Plugins** são extensões que modificam o comportamento do Claude Code para tarefas específicas. Diferente de MCP servers (que adicionam ferramentas), plugins modificam como o Claude pensa e age.
+**Plugins** são extensões que modificam o comportamento do Claude Code para tarefas específicas. Diferente de MCP servers (que adicionam ferramentas), plugins modificam como o Claude pensa e age — adicionando skills, comportamentos e fluxos de trabalho especializados.
 
 ### Como Funcionam?
 
@@ -447,55 +447,44 @@ Claude Code Base
       ↓
    Plugin aplicado
       ↓
-Comportamento modificado
+Comportamento modificado + Skills adicionados
 ```
 
-### Plugins Recomendados
+### Plugins Instalados
 
-#### 1. 📝 **code-review**
-
-**O que faz**: Transforma Claude em um revisor de código especializado
-
-**Ativa com**: `/code-review` ou `/review-pr`
-
-**Comportamento modificado**:
-- Analisa PRs de forma estruturada
-- Verifica segurança, performance, legibilidade
-- Sugere melhorias específicas
-- Identifica code smells
-- Valida testes
-
-**Exemplo de uso**:
-```
-Você: /code-review https://github.com/user/repo/pull/123
-
-Claude:
-## Code Review - PR #123
-
-### Segurança
-✓ Input validation presente
-⚠️ SQL query concatenada (linha 45) - usar prepared statements
-
-### Performance
-⚠️ Loop O(n²) detectado (linha 78-92)
-  Sugestão: usar Map para lookup O(1)
-
-### Testes
-✗ Nova função getUserProfile não tem testes
-  Recomendação: adicionar testes unitários
-```
+Os plugins abaixo são os atualmente configurados em `~/.claude/settings.json`:
 
 ---
 
-#### 2. 💡 **explanatory-output-style**
+#### 1. **superpowers** `superpowers@claude-plugins-official`
 
-**O que faz**: Ativa modo educacional com insights técnicos
+**O que faz**: Framework central de produtividade — o mais importante de todos os plugins. Adiciona um conjunto de skills especializados que guiam fluxos de trabalho de desenvolvimento.
+
+**Skills incluídos**:
+- `/brainstorm` — Exploração de requisitos antes de implementar
+- `/writing-plans` — Planejamento estruturado de features multi-step
+- `/executing-plans` — Execução de planos com checkpoints de revisão
+- `/systematic-debugging` — Debugging estruturado com hipóteses
+- `/test-driven-development` — TDD antes de escrever código de produção
+- `/verification-before-completion` — Verificação antes de declarar "pronto"
+- `/requesting-code-review` — Prepara trabalho para revisão
+- `/receiving-code-review` — Processa feedback de code review com rigor técnico
+- `/dispatching-parallel-agents` — Paraleliza tarefas independentes com subagentes
+- `/finishing-a-development-branch` — Guia opções de merge/PR ao concluir trabalho
+
+**Por que é essencial**: Sem este plugin, cada tarefa começa sem estrutura. Com ele, o Claude segue fluxos de trabalho disciplinados — planejando antes de codar, verificando antes de declarar sucesso.
+
+---
+
+#### 2. **explanatory-output-style** `explanatory-output-style@claude-code-plugins`
+
+**O que faz**: Ativa modo educacional com insights técnicos automáticos em todas as respostas.
 
 **Comportamento modificado**:
-- Explica decisões técnicas
+- Explica decisões técnicas e trade-offs
 - Fornece contexto arquitetural
-- Compartilha trade-offs de abordagens
-- Inclui blocos de "Insight" educacionais
+- Inclui blocos de "Insight" educacionais após escrever código
+- Aprofunda o "porquê" das escolhas de implementação
 
 **Exemplo de uso**:
 ```
@@ -513,35 +502,193 @@ Claude:
 ─────────────────────────────────────────────────
 ```
 
-**Quando ativar**: Ideal para aprendizado ou quando trabalha com desenvolvedores menos experientes.
+**Quando usar**: Ideal para aprendizado, onboarding ou quando trabalha com desenvolvedores menos experientes no contexto de uma tecnologia.
 
 ---
 
-#### 3. 🎨 **frontend-design**
+#### 3. **context7** `context7@claude-plugins-official`
 
-**O que faz**: Especialista em criar interfaces frontend de alta qualidade
+**O que faz**: Conecta o Claude a documentação atualizada de bibliotecas e frameworks diretamente na conversa.
+
+**Capacidades**:
+- Busca documentação de qualquer biblioteca por nome
+- Retorna exemplos de código atualizados
+- Acessa versões específicas de documentação
+- Supera o knowledge cutoff do modelo para libs em evolução rápida
+
+**Exemplo de uso**:
+```
+Você: "Como configurar TanStack Query v5 com React?"
+Claude: [Busca docs atualizadas do TanStack Query v5 e retorna exemplo]
+
+Você: "Qual a API do Drizzle ORM para migrations?"
+Claude: [Recupera documentação específica de migrations no Drizzle]
+```
+
+**Por que é valioso**: O Claude tem conhecimento até Agosto de 2025. Para libs que lançaram breaking changes recentes (Next.js 15, React 19, etc.), este plugin garante que exemplos de código estejam corretos e atualizados.
+
+---
+
+#### 4. **code-review** `code-review@claude-plugins-official`
+
+**O que faz**: Transforma o Claude em um revisor de código especializado com análise estruturada de PRs.
+
+**Ativa com**: `/code-review` ou `/review-pr`
+
+**Comportamento modificado**:
+- Analisa PRs de forma estruturada por categorias
+- Verifica segurança, performance, legibilidade e testes
+- Identifica code smells e anti-patterns
+- Sugere melhorias específicas com linha de referência
+
+**Exemplo de uso**:
+```
+Você: /review-pr 123
+
+Claude:
+## Code Review - PR #123
+
+### Segurança
+- SQL query concatenada (UserService.cs:45) — usar prepared statements
+
+### Performance
+- Loop O(n²) detectado (linhas 78-92)
+  Sugestão: usar Map para lookup O(1)
+
+### Testes
+- Nova função getUserProfile sem cobertura de testes
+```
+
+---
+
+#### 5. **frontend-design** `frontend-design@claude-plugins-official`
+
+**O que faz**: Especialista em criar interfaces frontend de alta qualidade, evitando a estética genérica de código gerado por IA.
 
 **Ativa com**: `/frontend-design`
 
 **Comportamento modificado**:
-- Foco em design e UX
-- Componentes com estética profissional
-- Acessibilidade por padrão
-- Animações e transições suaves
-- Código visual polido
+- Gera componentes com design profissional e distintivo
+- Aplica acessibilidade (ARIA) por padrão
+- Inclui animações e transições suaves
+- Considera dark mode e responsividade
+- Evita padrões visuais clichês de "design por IA"
 
 **Exemplo de uso**:
 ```
-Você: /frontend-design Crie um card de produto
+Você: /frontend-design Crie um card de produto para e-commerce
 
 Claude:
-[Gera componente com]:
-- Design moderno e profissional
-- Hover effects suaves
-- Acessibilidade (ARIA labels)
-- Responsividade
-- Dark mode support
+[Gera componente com hover effects, layout polido,
+ acessibilidade completa e responsividade]
 ```
+
+---
+
+#### 6. **github** `github@claude-plugins-official`
+
+**O que faz**: Adiciona skills e comportamentos especializados para workflows com GitHub — complementa o MCP Server do GitHub com fluxos de trabalho mais estruturados.
+
+**Capacidades**:
+- Workflows de criação de PRs com descrições padronizadas
+- Análise de issues e planejamento de implementação
+- Integração com o fluxo de branches do projeto
+
+**Diferença do GitHub MCP Server**: O MCP Server dá acesso à API do GitHub (ferramentas). Este plugin ensina o Claude a usar essas ferramentas de forma mais inteligente e estruturada (comportamento).
+
+---
+
+#### 7. **feature-dev** `feature-dev@claude-plugins-official`
+
+**O que faz**: Guia o desenvolvimento de features com foco em compreensão do codebase e decisões arquiteturais antes de implementar.
+
+**Skills incluídos**:
+- `/feature-dev` — Inicia fluxo completo de desenvolvimento de feature
+- `code-explorer` — Subagente para análise profunda de features existentes
+- `code-architect` — Subagente para design de arquitetura de novas features
+- `code-reviewer` — Subagente para revisão ao final da implementação
+
+**Fluxo de trabalho**:
+```
+1. Explorar codebase (code-explorer)
+       ↓
+2. Desenhar arquitetura (code-architect)
+       ↓
+3. Implementar com contexto
+       ↓
+4. Revisar implementação (code-reviewer)
+```
+
+**Por que é valioso**: Evita o problema de implementar features sem entender o contexto do codebase, resultando em código que não segue os padrões existentes.
+
+---
+
+#### 8. **code-simplifier** `code-simplifier@claude-plugins-official`
+
+**O que faz**: Revisa código recém-escrito para clareza, consistência e manutenibilidade, identificando oportunidades de simplificação sem perder funcionalidade.
+
+**Ativa com**: `/simplify`
+
+**O que verifica**:
+- Código duplicado ou redundante
+- Abstrações prematuras desnecessárias
+- Complexidade acidental vs. complexidade essencial
+- Oportunidades de reutilizar utilitários já existentes no projeto
+- Consistência com padrões do codebase
+
+**Quando usar**: Após implementar uma feature, antes de fazer commit — especialmente útil quando o código foi desenvolvido de forma iterativa e acumulou complexidade desnecessária.
+
+---
+
+#### 9. **serena** `serena@claude-plugins-official`
+
+**O que faz**: Integra o Serena como plugin de análise semântica avançada de código, complementando o Serena MCP Server com instruções e comportamentos específicos.
+
+**Capacidades reforçadas**:
+- Leitura incremental e eficiente de código (evita ler arquivos inteiros)
+- Navegação por símbolos (classes, métodos, funções) sem ler arquivos completos
+- Refactoring semântico seguro com verificação de referências
+- Edição a nível de símbolo ao invés de edição de texto bruto
+
+**Diferença do Serena MCP Server**: O MCP Server provê as ferramentas de análise semântica. Este plugin instrui o Claude sobre *como* e *quando* usá-las de forma eficiente, economizando tokens.
+
+---
+
+#### 10. **claude-md-management** `claude-md-management@claude-plugins-official`
+
+**O que faz**: Gerencia arquivos CLAUDE.md em repositórios — audita qualidade, identifica lacunas e mantém as instruções de projeto atualizadas.
+
+**Skills incluídos**:
+- `/revise-claude-md` — Atualiza CLAUDE.md com aprendizados da sessão atual
+- `/claude-md-improver` — Audita e melhora CLAUDE.md existentes
+
+**Fluxo do `/claude-md-improver`**:
+```
+1. Escaneia todos os CLAUDE.md do repositório
+2. Avalia qualidade contra templates recomendados
+3. Gera relatório de qualidade
+4. Faz atualizações direcionadas
+```
+
+**Por que é importante**: CLAUDE.md é a "memória de longo prazo" do projeto. Mantê-lo atualizado garante que novas conversas com Claude comecem com o contexto correto do projeto.
+
+---
+
+#### 11. **claude-code-setup** `claude-code-setup@claude-plugins-official`
+
+**O que faz**: Analisa um codebase e recomenda automações do Claude Code — hooks, subagentes, skills, plugins e MCP servers mais adequados para aquele projeto específico.
+
+**Ativa com**: `/claude-automation-recommender`
+
+**O que analisa**:
+- Linguagens e frameworks do projeto
+- Workflows de CI/CD existentes
+- Tarefas repetitivas identificáveis
+- Integrações externas (GitHub, Docker, etc.)
+
+**Output**: Lista priorizada de configurações recomendadas com justificativas, scripts de setup e exemplos de configuração.
+
+**Quando usar**: Ao iniciar Claude Code em um novo projeto, para configurar o ambiente de forma otimizada desde o início.
 
 ---
 
@@ -551,33 +698,57 @@ Claude:
 ```
 1. Cmd+Shift+P (Mac) ou Ctrl+Shift+P (Windows)
 2. Digite: "Claude: Install Plugin"
-3. Digite o nome: "code-review@claude-code-plugins"
+3. Digite o identificador completo do plugin
 ```
 
-**Via Configuração Manual**:
+**Via `settings.json`** (`~/.claude/settings.json`):
 ```json
 {
-  "plugins": [
-    "code-review@claude-code-plugins",
-    "explanatory-output-style@claude-code-plugins",
-    "frontend-design@claude-code-plugins"
-  ]
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": true,
+    "explanatory-output-style@claude-code-plugins": true,
+    "context7@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "serena@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "claude-code-setup@claude-plugins-official": true
+  }
 }
 ```
+
+### Resumo dos Plugins por Caso de Uso
+
+| Plugin | Quando Usar |
+|--------|-------------|
+| `superpowers` | Sempre ativo — estrutura todos os fluxos de trabalho |
+| `explanatory-output-style` | Sempre ativo — modo educacional |
+| `context7` | Ao trabalhar com libs/frameworks com docs recentes |
+| `code-review` | Antes de mergear PRs (`/review-pr`) |
+| `frontend-design` | Ao criar componentes de UI (`/frontend-design`) |
+| `github` | Em workflows com PRs, issues e branches |
+| `feature-dev` | Ao iniciar desenvolvimento de features (`/feature-dev`) |
+| `code-simplifier` | Após implementar, antes de commitar (`/simplify`) |
+| `serena` | Sempre ativo — otimiza leitura semântica de código |
+| `claude-md-management` | Ao atualizar documentação do projeto (`/revise-claude-md`) |
+| `claude-code-setup` | Ao configurar Claude Code em novo projeto |
 
 ### Plugin vs MCP Server
 
 | Aspecto | Plugin | MCP Server |
 |---------|--------|------------|
-| **O que faz** | Modifica comportamento do Claude | Adiciona ferramentas/capacidades |
-| **Como funciona** | Altera instruções internas | Conecta a serviços externos |
-| **Exemplo** | Modo code-review | Acesso a GitHub API |
-| **Ativação** | Manual com `/comando` ou auto | Sempre disponível |
-| **Uso** | Tarefas específicas | Operações gerais |
+| **O que faz** | Modifica comportamento e adiciona skills | Adiciona ferramentas e capacidades externas |
+| **Como funciona** | Altera instruções e fluxos internos | Conecta a serviços e APIs externos |
+| **Exemplo** | `code-review` — ensina como revisar código | GitHub MCP — acesso à API do GitHub |
+| **Ativação** | Configurado em `settings.json` | Configurado em `mcp.json` |
+| **Persiste** | Em todas as conversas do projeto | Em todas as conversas do projeto |
 
 **Analogia**:
-- **Plugin** = Mudar a "personalidade" do Claude para uma tarefa
-- **MCP Server** = Dar novas "ferramentas" ao Claude
+- **Plugin** = Mudar a "especialidade e metodologia" do Claude
+- **MCP Server** = Dar novas "ferramentas e acessos" ao Claude
 
 ---
 
@@ -1033,8 +1204,17 @@ Exemplo real de configuração completa:
 4. **Instalar Plugins**
    ```
    Cmd+Shift+P → "Claude: Install Plugin"
-   - code-review@claude-code-plugins
+   - superpowers@claude-plugins-official
    - explanatory-output-style@claude-code-plugins
+   - context7@claude-plugins-official
+   - code-review@claude-plugins-official
+   - frontend-design@claude-plugins-official
+   - feature-dev@claude-plugins-official
+   - code-simplifier@claude-plugins-official
+   - serena@claude-plugins-official
+   - claude-md-management@claude-plugins-official
+   - claude-code-setup@claude-plugins-official
+   - github@claude-plugins-official
    ```
 
 5. **Testar**
@@ -1165,6 +1345,6 @@ Melhorias e sugestões são bem-vindas!
 
 Este projeto é de uso interno. Configurações podem ser adaptadas conforme necessidade.
 
-**Versão:** 2.0.0
-**Última atualização:** 06/02/2026
+**Versão:** 2.1.0
+**Última atualização:** 10/03/2026
 **Compatível com:** Claude Code VSCode Extension (todas as versões)

@@ -180,13 +180,23 @@ Use a mesma estrutura JSON da Opção A.
 
 ## Configuração de Plugins
 
-Os plugins adicionam funcionalidades específicas ao Claude Code.
+Os plugins adicionam skills, comportamentos e fluxos de trabalho especializados ao Claude Code.
 
-### Plugins Recomendados
+### Plugins do Time
 
-1. **code-review** - Melhorias para code review
-2. **explanatory-output-style** - Modo de saída educacional
-3. **frontend-design** - Assistente para design de UI
+| Plugin | Identificador | Prioridade |
+|--------|--------------|------------|
+| superpowers | `superpowers@claude-plugins-official` | Essencial |
+| explanatory-output-style | `explanatory-output-style@claude-code-plugins` | Essencial |
+| serena | `serena@claude-plugins-official` | Essencial |
+| context7 | `context7@claude-plugins-official` | Alta |
+| code-review | `code-review@claude-plugins-official` | Alta |
+| frontend-design | `frontend-design@claude-plugins-official` | Alta |
+| feature-dev | `feature-dev@claude-plugins-official` | Alta |
+| github | `github@claude-plugins-official` | Alta |
+| code-simplifier | `code-simplifier@claude-plugins-official` | Média |
+| claude-md-management | `claude-md-management@claude-plugins-official` | Média |
+| claude-code-setup | `claude-code-setup@claude-plugins-official` | Média |
 
 ### Instalação dos Plugins
 
@@ -194,11 +204,8 @@ Os plugins adicionam funcionalidades específicas ao Claude Code.
 
 1. Abra o Command Palette (Cmd+Shift+P ou Ctrl+Shift+P)
 2. Digite "Claude: Install Plugin"
-3. Selecione os plugins da lista:
-   - `code-review@claude-code-plugins`
-   - `explanatory-output-style@claude-code-plugins`
-   - `frontend-design@claude-code-plugins`
-4. Aguarde a instalação
+3. Instale cada plugin pelo seu identificador completo
+4. Aguarde a instalação de cada um
 
 #### Via Arquivo de Configuração
 
@@ -209,29 +216,70 @@ Edite o arquivo de configuração do Claude:
 ```json
 {
   "enabledPlugins": {
-    "code-review@claude-code-plugins": true,
+    "superpowers@claude-plugins-official": true,
     "explanatory-output-style@claude-code-plugins": true,
-    "frontend-design@claude-code-plugins": true
+    "context7@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "serena@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "claude-code-setup@claude-plugins-official": true
   }
 }
 ```
 
 ### Descrição dos Plugins
 
-**code-review**
-- Adiciona funcionalidades específicas para revisar pull requests
-- Comando: `/review-pr` ou `/code-review`
-- Faz análise detalhada de mudanças
+**superpowers** (essencial)
+- Framework central de produtividade — orienta todos os fluxos de trabalho
+- Skills: `/brainstorm`, `/writing-plans`, `/executing-plans`, `/systematic-debugging`, `/test-driven-development`, `/verification-before-completion`
+- Sem este plugin, o Claude trabalha sem estrutura disciplinada
 
-**explanatory-output-style**
-- Claude fornece explicações educacionais durante o trabalho
-- Modo ideal para aprendizado e onboarding
-- Fornece insights sobre decisões técnicas
+**explanatory-output-style** (essencial)
+- Ativa modo educacional com insights técnicos automáticos
+- Explica decisões técnicas, trade-offs e contexto arquitetural
+
+**serena** (essencial)
+- Instrui o Claude a usar o Serena MCP Server de forma eficiente
+- Leitura incremental de código por símbolos (evita ler arquivos inteiros)
+- Complementa o Serena MCP Server com comportamentos específicos
+
+**context7**
+- Conecta o Claude a documentação atualizada de bibliotecas
+- Supera o knowledge cutoff para libs em evolução rápida (Next.js, React, etc.)
+
+**code-review**
+- Análise estruturada de pull requests por categorias
+- Comando: `/review-pr` ou `/code-review`
+- Verifica segurança, performance, legibilidade e testes
 
 **frontend-design**
-- Especializado em criar interfaces frontend
-- Gera código com melhor qualidade visual
+- Especializado em criar interfaces frontend de alta qualidade
+- Evita estética genérica de código gerado por IA
 - Comando: `/frontend-design`
+
+**feature-dev**
+- Guia o desenvolvimento de features com análise de codebase antes de implementar
+- Skills: `/feature-dev`, subagentes `code-explorer`, `code-architect`, `code-reviewer`
+
+**github**
+- Workflows estruturados para PRs, issues e branches
+- Complementa o GitHub MCP Server com fluxos de trabalho inteligentes
+
+**code-simplifier**
+- Revisa código recém-escrito para clareza e manutenibilidade
+- Comando: `/simplify` — usar após implementar, antes de commitar
+
+**claude-md-management**
+- Gerencia arquivos CLAUDE.md: audita qualidade e mantém instruções atualizadas
+- Comandos: `/revise-claude-md`, `/claude-md-improver`
+
+**claude-code-setup**
+- Analisa codebase e recomenda automações do Claude Code
+- Comando: `/claude-automation-recommender` — usar ao iniciar em novo projeto
 
 ---
 
@@ -290,7 +338,7 @@ Você deve ver os servers configurados e suas ferramentas.
 
 1. No VSCode, abra o Command Palette
 2. Digite "Claude: List Installed Plugins"
-3. Verifique se os 3 plugins estão listados e habilitados
+3. Verifique se os 11 plugins estão listados e habilitados
 
 ### Verificar CLAUDE.md
 
@@ -625,7 +673,7 @@ Cada membro do time cria sua própria cópia local com seus tokens.
 A: Não. Configure apenas os que você vai usar. Os essenciais são: filesystem, github e serena.
 
 **Q: Os plugins são obrigatórios?**
-A: Não, mas são altamente recomendados. O `explanatory-output-style` é especialmente útil.
+A: Não, mas são altamente recomendados. O `superpowers`, `explanatory-output-style` e `serena` são essenciais — os demais podem ser instalados conforme necessidade do time.
 
 **Q: Posso ter CLAUDE.md diferente por projeto?**
 A: Sim! Coloque um `CLAUDE.md` na raiz do projeto. Ele complementa (não substitui) o global.
@@ -650,6 +698,6 @@ A: Sim! Consulte a documentação oficial: https://modelcontextprotocol.io
 
 ---
 
-**Versão:** 1.0.0
-**Última atualização:** 06/02/2026
+**Versão:** 1.1.0
+**Última atualização:** 10/03/2026
 **Mantenedor:** [Seu Nome/Time]
