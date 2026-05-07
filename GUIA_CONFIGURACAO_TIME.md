@@ -7,8 +7,11 @@
 3. [Configuração de MCP Servers](#configuração-de-mcp-servers)
 4. [Configuração de Plugins](#configuração-de-plugins)
 5. [Arquivo CLAUDE.md Global](#arquivo-claudemd-global)
-6. [Verificação da Instalação](#verificação-da-instalação)
-7. [Troubleshooting](#troubleshooting)
+6. [Commands — Atalhos de Workflow](#commands--atalhos-de-workflow) ⭐ Novo
+7. [Agents — Subagentes Especializados](#agents--subagentes-especializados) ⭐ Novo
+8. [Memory — Contexto Persistente](#memory--contexto-persistente) ⭐ Novo
+9. [Verificação da Instalação](#verificação-da-instalação)
+10. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -320,7 +323,285 @@ O Claude Code carrega automaticamente este arquivo e aplica as instruções a to
 
 ---
 
-## Verificação da Instalação
+---
+
+## Commands — Atalhos de Workflow
+
+### O que são Commands?
+
+**Commands** são arquivos `.md` que viram atalhos de barra (`/nome`) no chat do Claude. Pense neles como "receitas de bolo" — você escreve uma vez o que o Claude deve fazer, e na próxima vez é só digitar `/nome` para executar.
+
+### Por que usar?
+
+Sem command:
+```
+Você: "Antes de começar, verifica se o GitHub MCP e o Jira estão autenticados,
+       por favor. Se algum falhar, me avisa para eu renovar o token."
+```
+
+Com command `/preflight`:
+```
+Você: /preflight
+Claude: [verifica tudo automaticamente]
+```
+
+### Como instalar
+
+1. Crie a pasta de commands:
+   ```bash
+   mkdir -p ~/.claude/commands
+   ```
+
+2. Copie o arquivo de command:
+   ```bash
+   cp commands/preflight.md ~/.claude/commands/preflight.md
+   ```
+
+3. Pronto! Reinicie o Claude Code e o comando `/preflight` já aparece na lista.
+
+### Commands disponíveis neste repositório
+
+#### `/preflight` — Verificação de MCPs
+
+**Quando usar:** No início de qualquer sessão longa que vai usar GitHub, Jira ou Serena.
+
+**O que faz:** Testa se os três MCPs principais estão autenticados e funcionando. Se algum falhar, te avisa antes de você ficar 30 minutos trabalhando e descobrir no meio que o token expirou.
+
+```
+/preflight
+
+→ | MCP     | Status | Detalhe |
+  | GitHub  | OK     |         |
+  | Jira    | OK     |         |
+  | Serena  | OK     |         |
+```
+
+### Como criar seu próprio command
+
+Crie um arquivo `.md` em `~/.claude/commands/`:
+
+```markdown
+---
+description: Descrição do que o command faz (aparece na lista)
+---
+
+# Nome do Command
+
+Instrução clara do que o Claude deve fazer quando este command for ativado.
+
+## Passo 1
+...
+
+## Passo 2
+...
+```
+
+Salve como `~/.claude/commands/meu-command.md` e use com `/meu-command`.
+
+---
+
+## Agents — Subagentes Especializados
+
+### O que são Agents?
+
+**Agents** são como "funcionários especializados" que o Claude pode contratar para fazer tarefas específicas em paralelo. O Claude principal (o que você conversa) é o "gerente" — ele distribui o trabalho, os agentes executam, e o gerente consolida os resultados.
+
+### Por que usar?
+
+**Sem agents (sequencial):**
+```
+PR 42 → revisada em 3 min
+PR 43 → revisada em 3 min  (começa só depois da 42)
+PR 51 → revisada em 3 min  (começa só depois da 43)
+Total: ~9 minutos
+```
+
+**Com agents (paralelo):**
+```
+PR 42 ─┐
+PR 43 ─┼── revisadas ao mesmo tempo
+PR 51 ─┘
+Total: ~3 minutos
+```
+
+### Como instalar
+
+1. Crie a pasta de agents:
+   ```bash
+   mkdir -p ~/.claude/agents
+   ```
+
+2. Copie os arquivos de agents:
+   ```bash
+   cp agents/pr-reviewer.md ~/.claude/agents/pr-reviewer.md
+   cp agents/clinical-metrics-analyst.md ~/.claude/agents/clinical-metrics-analyst.md
+   ```
+
+3. Pronto! O Claude já sabe usar esses agentes automaticamente.
+
+### Agents disponíveis neste repositório
+
+#### `pr-reviewer` — Revisor de PRs
+
+**Quando usar:** Quando tiver 2 ou mais PRs para revisar ao mesmo tempo.
+
+**Como pedir:**
+```
+"Revisa as PRs 42, 43 e 51 do olive-health/auth-api para mim"
+
+→ Claude dispara 3 pr-reviewer em paralelo
+→ Cada um posta os comentários inline no GitHub
+→ Você recebe o resumo de todos de uma vez
+```
+
+**O que ele faz:**
+- Verifica se a PR está aberta (não review PR fechada)
+- Pega o diff e filtra mudanças mecânicas (formatação, renomeação de namespace)
+- Busca bugs reais, problemas de segurança, edge cases ignorados
+- Posta comentários inline no GitHub com o mesmo estilo do `/review`
+- Nunca usa tom imperativo — sempre didático e informal
+
+#### `clinical-metrics-analyst` — Especialista em Métricas Clínicas
+
+**Quando usar:** Em PRs do `clinical-metrics-api` que mexem com dados de ECG, BIOZ ou sinais vitais.
+
+**Como pedir:**
+```
+"Analisa a PR 78 do clinical-metrics-api com foco em dados clínicos"
+
+→ Claude usa o agente especializado que sabe sobre:
+   - float vs decimal para valores médicos
+   - Validação de ranges fisiológicos (SpO2, FC, PA, temperatura)
+   - Integridade de timestamps em séries temporais
+   - Soft delete obrigatório para histórico clínico
+```
+
+### Diferença entre Agent e Skill (`/review`)
+
+| | Skill `/review` | Agent `pr-reviewer` |
+|---|---|---|
+| **Quando usar** | 1 PR | 2+ PRs |
+| **Paralelismo** | Já é paralelo internamente | Múltiplas PRs em paralelo |
+| **Quem chama** | Você, direto | Claude, automaticamente |
+
+### Como criar seu próprio agent
+
+Crie um arquivo `.md` em `~/.claude/agents/`:
+
+```markdown
+---
+name: nome-do-agente
+description: O que ele faz (o Claude usa isso para decidir quando chamar)
+model: sonnet  # ou haiku (mais barato/rápido para tarefas simples)
+---
+
+# Contexto
+
+[Explique o domínio e o que o agente sabe]
+
+## Inputs obrigatórios
+
+[O que precisa ser passado para ele funcionar]
+
+## Processo
+
+[Passo a passo do que ele deve fazer]
+
+## Output
+
+[Como ele deve retornar o resultado]
+```
+
+---
+
+## Memory — Contexto Persistente
+
+### O que é Memory?
+
+**Memory** é um sistema de arquivos que o Claude lê automaticamente no início de cada sessão. É como um "briefing diário" que você escreve uma vez e o Claude usa para sempre.
+
+### O problema que resolve
+
+Sabe quando você começa uma conversa nova e precisa explicar tudo de novo?
+- "O projeto usa Clean Architecture..."
+- "Não esquece que o docker precisa estar rodando..."
+- "A porta da auth-api é 5003..."
+
+Com Memory, você escreve isso uma vez e o Claude já sabe nas próximas conversas.
+
+### Como instalar
+
+#### Passo 1: Descobrir o caminho da pasta
+
+Abra o Claude Code **dentro do projeto** que quer configurar e pergunte:
+```
+Qual é o caminho exato da minha pasta de memory para este projeto?
+```
+
+Ele vai te responder algo como:
+```
+~/.claude/projects/-Users-seunome-github-projects-auth-api/memory/
+```
+
+#### Passo 2: Criar a estrutura
+
+```bash
+# Substitua pelo caminho que o Claude te disse
+mkdir -p ~/.claude/projects/-Users-seunome-github-projects-auth-api/memory/
+```
+
+#### Passo 3: Copiar os exemplos
+
+```bash
+# Copie os arquivos de exemplo deste repositório
+cp memory/exemplos/MEMORY.md ~/.claude/projects/<seu-caminho>/memory/MEMORY.md
+cp memory/exemplos/user_meu_perfil.md ~/.claude/projects/<seu-caminho>/memory/
+cp memory/exemplos/projeto_olive_portas.md ~/.claude/projects/<seu-caminho>/memory/
+```
+
+#### Passo 4: Editar com suas informações
+
+Abra os arquivos copiados e substitua os exemplos com suas informações reais.
+
+### Estrutura dos arquivos
+
+**`MEMORY.md`** (obrigatório) — é o índice. O Claude lê este arquivo em toda sessão:
+```markdown
+- [Meu perfil](user_meu_perfil.md) — quem sou, meu papel
+- [Portas das APIs](projeto_olive_portas.md) — portas locais de cada serviço
+```
+
+**Arquivos individuais** — um por assunto:
+```markdown
+---
+name: Nome da memória
+description: Uma linha descrevendo o que tem aqui
+type: user | project | feedback | reference
+---
+
+Conteúdo da memória aqui...
+```
+
+### Pedir pro Claude salvar automaticamente
+
+Você não precisa criar os arquivos manualmente. Basta pedir na conversa:
+
+```
+"Lembre que eu prefiro ver exemplos de código em C# antes da explicação"
+"Lembre que a questionnaire-api tem porta 22771, diferente das outras"
+"Lembre que em migrations .NET precisamos sempre rodar dotnet ef database update depois"
+```
+
+O Claude vai criar o arquivo de memória no lugar certo automaticamente.
+
+### Exemplos prontos para Oliv-e
+
+Veja a pasta `memory/exemplos/` deste repositório com:
+- `user_meu_perfil.md` — template para você preencher com seu perfil
+- `projeto_olive_portas.md` — portas reais de todos os serviços (já preenchido)
+- `MEMORY.md` — arquivo de índice de exemplo
+
+---
 
 ### Verificar MCP Servers
 
