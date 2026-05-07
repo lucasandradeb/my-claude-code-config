@@ -8,7 +8,7 @@ Imagine que você tem um caderno de anotações que o Claude lê automaticamente
 
 Sem memória, toda conversa começa do zero. Você precisa explicar de novo:
 - "O projeto usa Clean Architecture"
-- "A auth-api roda na porta 5003"
+- "A API de autenticação roda na porta X"
 - "Não esqueça de rodar o docker antes"
 
 Com memória, o Claude já sabe tudo isso antes de você falar.
@@ -32,9 +32,9 @@ O `MEMORY.md` é o índice — uma linha por memória. O Claude lê esse arquivo
 | Tipo | O que guardar | Exemplo |
 |------|--------------|---------|
 | `user` | Seu perfil, stack preferida, forma de comunicação | "Prefiro explicações com exemplos de código" |
-| `project` | Arquitetura, decisões técnicas, contexto dos projetos | "auth-api usa JWT com refresh token no Redis" |
-| `feedback` | Lições aprendidas, erros que não devem se repetir | "Nunca printar credenciais no terminal" |
-| `reference` | Onde encontrar informações externas | "Bugs do pipeline ficam no board X do Jira" |
+| `project` | Arquitetura, decisões técnicas, contexto dos projetos | "A API de auth usa JWT com refresh token no Redis" |
+| `feedback` | Lições aprendidas, erros que não devem se repetir | "Nunca commitar o arquivo .env.local" |
+| `reference` | Onde encontrar informações externas | "Bugs do pipeline ficam no board X do Linear" |
 
 ## Instalação
 
@@ -43,19 +43,13 @@ O `MEMORY.md` é o índice — uma linha por memória. O Claude lê esse arquivo
 Abra o terminal e rode:
 
 ```bash
-# Substitua <nome-do-projeto> pelo nome real
-# Exemplo: se trabalha em auth-api:
-mkdir -p ~/.claude/projects/-Users-seuusuario-github-projects-auth-api/memory/
-```
-
-**Dica**: Não sabe o nome exato da pasta? Abra o Claude Code dentro do projeto e pergunte:
-```
-Qual é o caminho exato da pasta de memória deste projeto?
+# Substitua <caminho> pelo caminho real do projeto
+# Dica: abra o projeto no Claude Code e pergunte "qual é o caminho exato da pasta de memória?"
+mkdir -p ~/.claude/projects/<caminho>/memory/
 ```
 
 ### Passo 2: Criar o arquivo de índice
 
-Crie o arquivo `MEMORY.md` dentro da pasta:
 ```bash
 touch ~/.claude/projects/<caminho>/memory/MEMORY.md
 ```
@@ -64,20 +58,16 @@ touch ~/.claude/projects/<caminho>/memory/MEMORY.md
 
 Copie os arquivos de exemplo desta pasta (`memory/exemplos/`) e edite com suas informações.
 
-## Exemplo real — Oliv-e Health
-
-Veja os exemplos em `memory/exemplos/` com as memórias prontas para os projetos da Oliv-e.
-
 ## Como pedir pro Claude salvar algo
 
 Simplesmente peça na conversa:
 
 ```
-"Lembre que a questionnaire-api tem uma peculiaridade: a porta dela é 22771, diferente de todas as outras"
+"Lembre que a nossa fila de mensagens usa o exchange X e a routing key Y"
 ```
 
 O Claude vai criar um arquivo de memória automaticamente.
 
 ## Dica importante
 
-Memórias são específicas por projeto. Uma memória criada dentro do `auth-api` não vai aparecer quando você abrir o `account-api`. Para memórias globais (que valem em qualquer projeto), use o `~/.claude/CLAUDE.md` global.
+Memórias são específicas por projeto. Uma memória criada dentro do `projeto-A` não vai aparecer quando você abrir o `projeto-B`. Para memórias globais (que valem em qualquer projeto), use o `~/.claude/CLAUDE.md` global.

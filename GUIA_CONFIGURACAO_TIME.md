@@ -434,7 +434,7 @@ Total: ~3 minutos
 2. Copie os arquivos de agents:
    ```bash
    cp agents/pr-reviewer.md ~/.claude/agents/pr-reviewer.md
-   cp agents/clinical-metrics-analyst.md ~/.claude/agents/clinical-metrics-analyst.md
+   cp agents/domain-analyst.md ~/.claude/agents/domain-analyst.md
    ```
 
 3. Pronto! O Claude já sabe usar esses agentes automaticamente.
@@ -447,7 +447,7 @@ Total: ~3 minutos
 
 **Como pedir:**
 ```
-"Revisa as PRs 42, 43 e 51 do olive-health/auth-api para mim"
+"Revisa as PRs 42, 43 e 51 do meu-time/meu-repo para mim"
 
 → Claude dispara 3 pr-reviewer em paralelo
 → Cada um posta os comentários inline no GitHub
@@ -458,23 +458,20 @@ Total: ~3 minutos
 - Verifica se a PR está aberta (não review PR fechada)
 - Pega o diff e filtra mudanças mecânicas (formatação, renomeação de namespace)
 - Busca bugs reais, problemas de segurança, edge cases ignorados
-- Posta comentários inline no GitHub com o mesmo estilo do `/review`
+- Posta comentários inline no GitHub
 - Nunca usa tom imperativo — sempre didático e informal
 
-#### `clinical-metrics-analyst` — Especialista em Métricas Clínicas
+#### `domain-analyst` — Template de Especialista em Domínio
 
-**Quando usar:** Em PRs do `clinical-metrics-api` que mexem com dados de ECG, BIOZ ou sinais vitais.
+**Quando usar:** Em PRs que tocam lógica crítica de negócio que requer conhecimento especializado além da revisão genérica.
 
-**Como pedir:**
-```
-"Analisa a PR 78 do clinical-metrics-api com foco em dados clínicos"
+**O que é:** Um template que você adapta com o conhecimento do seu domínio — regras de negócio, invariantes críticos, tipos de dados específicos. Por exemplo:
 
-→ Claude usa o agente especializado que sabe sobre:
-   - float vs decimal para valores médicos
-   - Validação de ranges fisiológicos (SpO2, FC, PA, temperatura)
-   - Integridade de timestamps em séries temporais
-   - Soft delete obrigatório para histórico clínico
-```
+- Um sistema financeiro pode precisar saber que valores monetários devem usar `decimal`, nunca `float`
+- Um sistema de saúde pode precisar validar ranges fisiológicos
+- Um sistema de e-commerce pode precisar garantir consistência de estoque
+
+**Como usar:** Edite `agents/domain-analyst.md` e substitua as seções marcadas com `[ADAPTE]` pelo conhecimento do seu domínio. Então dispare junto com o `pr-reviewer` em PRs que mexem nessa área.
 
 ### Diferença entre Agent e Skill (`/review`)
 
@@ -556,7 +553,7 @@ mkdir -p ~/.claude/projects/-Users-seunome-github-projects-auth-api/memory/
 # Copie os arquivos de exemplo deste repositório
 cp memory/exemplos/MEMORY.md ~/.claude/projects/<seu-caminho>/memory/MEMORY.md
 cp memory/exemplos/user_meu_perfil.md ~/.claude/projects/<seu-caminho>/memory/
-cp memory/exemplos/projeto_olive_portas.md ~/.claude/projects/<seu-caminho>/memory/
+cp memory/exemplos/projeto_portas_servicos.md ~/.claude/projects/<seu-caminho>/memory/
 ```
 
 #### Passo 4: Editar com suas informações
@@ -568,7 +565,7 @@ Abra os arquivos copiados e substitua os exemplos com suas informações reais.
 **`MEMORY.md`** (obrigatório) — é o índice. O Claude lê este arquivo em toda sessão:
 ```markdown
 - [Meu perfil](user_meu_perfil.md) — quem sou, meu papel
-- [Portas das APIs](projeto_olive_portas.md) — portas locais de cada serviço
+- [Portas dos serviços](projeto_portas_servicos.md) — portas locais de cada serviço
 ```
 
 **Arquivos individuais** — um por assunto:
@@ -587,18 +584,18 @@ Conteúdo da memória aqui...
 Você não precisa criar os arquivos manualmente. Basta pedir na conversa:
 
 ```
-"Lembre que eu prefiro ver exemplos de código em C# antes da explicação"
-"Lembre que a questionnaire-api tem porta 22771, diferente das outras"
-"Lembre que em migrations .NET precisamos sempre rodar dotnet ef database update depois"
+"Lembre que eu prefiro ver exemplos de código antes da explicação teórica"
+"Lembre que a fila de mensagens usa o exchange X e a routing key Y"
+"Lembre que em migrations precisamos sempre rodar o comando de update depois"
 ```
 
 O Claude vai criar o arquivo de memória no lugar certo automaticamente.
 
-### Exemplos prontos para Oliv-e
+### Exemplos prontos para começar
 
 Veja a pasta `memory/exemplos/` deste repositório com:
 - `user_meu_perfil.md` — template para você preencher com seu perfil
-- `projeto_olive_portas.md` — portas reais de todos os serviços (já preenchido)
+- `projeto_portas_servicos.md` — template de portas locais dos serviços
 - `MEMORY.md` — arquivo de índice de exemplo
 
 ---
