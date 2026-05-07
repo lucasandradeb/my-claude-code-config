@@ -10,8 +10,9 @@
 6. [Commands — Atalhos de Workflow](#commands--atalhos-de-workflow) ⭐ Novo
 7. [Agents — Subagentes Especializados](#agents--subagentes-especializados) ⭐ Novo
 8. [Memory — Contexto Persistente](#memory--contexto-persistente) ⭐ Novo
-9. [Verificação da Instalação](#verificação-da-instalação)
-10. [Troubleshooting](#troubleshooting)
+9. [Caveman — Economia de Tokens](#caveman--economia-de-tokens) ⭐ Novo
+10. [Verificação da Instalação](#verificação-da-instalação)
+11. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -597,6 +598,65 @@ Veja a pasta `memory/exemplos/` deste repositório com:
 - `user_meu_perfil.md` — template para você preencher com seu perfil
 - `projeto_portas_servicos.md` — template de portas locais dos serviços
 - `MEMORY.md` — arquivo de índice de exemplo
+
+---
+
+## Caveman — Economia de Tokens
+
+### O que é?
+
+**Caveman** é um plugin que faz o Claude responder em modo comprimido — sem artigos, sem filler words, sem introduções educadas — preservando 100% do conteúdo técnico.
+
+O nome vem do estilo: em vez de "The reason your component is re-rendering is likely because...", o Claude responde "New object ref each render. Wrap in `useMemo`."
+
+A economia média documentada é de **65% nos tokens de output**, com picos de 87% em explicações de bugs e refatorações.
+
+> Só afeta tokens de output (o que o Claude escreve). Tokens de input (seu código, contexto) não mudam.
+
+### Por que usar?
+
+Sessões longas com muito código — análise de PR, debugging, refatoração — geram respostas grandes. Com caveman, essas respostas ficam menores sem perder informação. Você lê mais rápido, o Claude responde mais rápido, e o custo de tokens cai.
+
+### Como instalar
+
+```bash
+# macOS / Linux
+curl -fsSL https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.sh | bash -s -- --minimal
+```
+
+O `--minimal` instala só o plugin. O `--all` adiciona hooks de statusline e um proxy MCP — só vale se quiser compressão máxima em tudo.
+
+### Como usar
+
+Após instalar, reinicie o Claude Code. Ative digitando no chat:
+
+```
+/caveman
+```
+
+Ou especifique um nível:
+
+| Comando | Nível | Descrição |
+|---------|-------|-----------|
+| `/caveman lite` | Lite | Remove filler, mantém gramática normal |
+| `/caveman full` | Full (padrão) | Remove artigos, usa fragmentos |
+| `/caveman ultra` | Ultra | Telegráfico, abrevia tudo |
+
+Para desativar: escreva `stop caveman` ou `normal mode` no chat.
+
+### Commands extras incluídos
+
+| Command | O que faz |
+|---------|-----------|
+| `/caveman-commit` | Gera commits Conventional no estilo comprimido, sujeito ≤ 50 chars |
+| `/caveman-review` | Review de PR ultra-concisa: `L42: bug: user null. Add guard.` |
+| `/caveman-stats` | Mostra economia de tokens da sessão atual em tempo real |
+
+### Quando não usar
+
+- Explicações para pessoas fora do time técnico
+- Avisos de segurança ou ações irreversíveis (o próprio caveman volta ao modo normal nesses casos automaticamente)
+- Quando você precisa de uma explicação educacional detalhada
 
 ---
 
