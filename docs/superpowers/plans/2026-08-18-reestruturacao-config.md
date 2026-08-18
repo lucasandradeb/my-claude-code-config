@@ -679,6 +679,8 @@ jira-task
 olive-design-system
 clinical-metrics-analyst
 health-data-security-reviewer
+# Command de retomada deste proprio trabalho — util so para o mantenedor
+retomar-config
 ```
 
 - [ ] **Step 2: Escrever o teste que falha**
