@@ -37,4 +37,8 @@ printf '%s' "$out" > "$F/../tmp.clean.json"
 assert_exit_code 0 scan_secrets "$F/../tmp.clean.json"
 rm -f "$F/../tmp.clean.json"
 
+# Regressao: PATTERNS_FILE ausente nao pode reportar "limpo" (fail-closed)
+( PATTERNS_FILE="$REPO/tests/fixtures/nao-existe-patterns.txt" scan_secrets "$F/settings.dirty.json" )
+assert_eq "$?" "2"
+
 exit $FAILURES

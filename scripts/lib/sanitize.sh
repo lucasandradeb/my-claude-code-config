@@ -51,12 +51,28 @@ sanitize_mcp() {
   ' "$1"
 }
 
-# Retorna 1 se algum padrao proibido aparecer. Usado por sync.sh antes de
-# escrever e por make check depois.
+# Retorna 1 se algum padrao proibido aparecer, 0 se limpo, 2 se o scan nao
+# pode ser executado (fail-closed: arquivo de padroes ausente ou erro do
+# grep NUNCA reporta "limpo"). Usado por sync.sh antes de escrever e por
+# make check depois.
 scan_secrets() {
   local target="$1"
-  if grep -rInE -f "$PATTERNS_FILE" "$target" >&2; then
-    return 1
+
+  if [ ! -f "$PATTERNS_FILE" ]; then
+    echo "scan_secrets: arquivo de padroes nao encontrado: $PATTERNS_FILE" >&2
+    return 2
   fi
-  return 0
+
+  local grep_status
+  grep -rInE -f "$PATTERNS_FILE" "$target" >&2
+  grep_status=$?
+
+  case "$grep_status" in
+    0) return 1 ;;  # match encontrado -> sujo
+    1) return 0 ;;  # nenhum match -> limpo
+    *)
+      echo "scan_secrets: grep falhou (codigo $grep_status) ao escanear $target" >&2
+      return 2
+      ;;
+  esac
 }
