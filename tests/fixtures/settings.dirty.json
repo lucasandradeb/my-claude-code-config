@@ -1,0 +1,32 @@
+{
+  "env": {
+    "MYSQL_PASSWORD": "senha-falsa-de-teste",
+    "ANTHROPIC_MODEL": "claude-sonnet-4-6"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(gh pr *)",
+      "Bash(kubectl get:*)",
+      "Bash(/bin/ls /Users/fulano/Projetos)",
+      "Bash(curl -s -H 'X-Metabase-Session: aaaabbbbccccdddd' https://exemplo.interno/api)"
+    ],
+    "defaultMode": "auto"
+  },
+  "model": "opus[1m]",
+  "hooks": {
+    "PreToolUse": [
+      { "matcher": "Bash", "hooks": [ { "type": "command", "command": "rtk hook claude" } ] }
+    ],
+    "PostToolUse": [
+      { "matcher": "Edit|Write", "hooks": [ { "type": "command", "command": "python3 /Users/fulano/.claude/prettier-hook.py" } ] }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash \"/Users/fulano/.claude/plugins/cache/caveman/caveman/ef6050c5e184/hooks/caveman-statusline.sh\""
+  },
+  "enabledPlugins": { "superpowers@claude-plugins-official": true },
+  "effortLevel": "medium",
+  "theme": "dark",
+  "autoMode": { "environment": ["**Trusted repo**: /Users/fulano/projeto"] }
+}
