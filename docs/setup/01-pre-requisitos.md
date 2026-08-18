@@ -68,6 +68,15 @@ winget install Microsoft.VisualStudioCode
 Com tudo isso confirmado, você está pronto para instalar a configuração deste
 repositório.
 
+## Dependência opcional: `rtk`
+
+O hook `PreToolUse` do template (veja [`reference/settings.md`](../reference/settings.md#hooks))
+roda `rtk hook claude` em todo comando `Bash`. `rtk` (ver
+[`config/RTK.md`](../../config/RTK.md)) é uma ferramenta externa do mantenedor
+— **não é instalada por `scripts/install.sh`** e não é obrigatória. Se você
+não a tem, veja [`troubleshooting.md`](../troubleshooting.md#todo-comando-bash-falha-depois-de-instalar)
+para instalá-la ou remover o hook.
+
 ---
 
 **Próximo:** [Instalação](02-instalacao.md)

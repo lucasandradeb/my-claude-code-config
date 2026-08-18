@@ -158,6 +158,27 @@ denylist de padrões depois que o artefato foi escrito.
 3. Rode `make sync` novamente — a verificação roda antes de qualquer
    escrita, então nada precisa ser desfeito no repositório.
 
+## Todo comando Bash falha depois de instalar
+
+**Sintoma:** depois de instalar esta configuração, todo comando `Bash` passa a
+falhar (ou o hook `PreToolUse` reporta erro) mesmo em comandos simples como
+`ls` ou `git status`.
+
+**Causa:** `settings.template.json` registra um hook `PreToolUse` (matcher
+`Bash`) que roda `rtk hook claude` antes de cada comando de shell — veja
+[`reference/settings.md`](reference/settings.md#hooks). `rtk` (RTK — Rust
+Token Killer, ver [`config/RTK.md`](../config/RTK.md)) é um binário externo do
+mantenedor, não incluído neste repositório e não instalado por
+`scripts/install.sh`. Sem `rtk` no `PATH`, o hook falha em todo `Bash`.
+
+**Correção:**
+1. Se você usa `rtk`: instale-o e confirme com `rtk --version`. Este
+   repositório não documenta o método de instalação porque não o distribui —
+   consulte a fonte de onde você obteve `rtk`.
+2. Se você não usa `rtk`: remova a entrada de `hooks.PreToolUse` que roda
+   `rtk hook claude` em `~/.claude/settings.json` (ou `.claude/settings.json`
+   do projeto).
+
 ## CI falha no job `secrets` — o que fazer quando o segredo já foi commitado
 
 **Sintoma:** o job `secrets` do CI (gitleaks + varredura de padrões
