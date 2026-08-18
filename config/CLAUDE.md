@@ -347,3 +347,5 @@ Foque em:
 
 **Última atualização:** 06/02/2026
 **Versão:** 1.0.0
+
+@RTK.md
