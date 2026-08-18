@@ -19,7 +19,7 @@ jobs:
         run: |
           if grep -rInE -f scripts/lib/patterns.txt \
                --exclude-dir=.git --exclude-dir=fixtures --exclude-dir=superpowers \
-               --exclude=patterns.txt . ; then
+               --exclude=patterns.txt --exclude=denylist.txt . ; then
             echo "::error::padrao proibido encontrado"
             exit 1
           fi
