@@ -55,4 +55,4 @@ Se tudo isso está verde, a instalação está completa.
 
 Qualquer FALHOU na tabela do `/preflight`, ou qualquer item do checklist que não
 funcionou como esperado, tem uma seção dedicada em
-[`troubleshooting.md`](troubleshooting.md).
+[`troubleshooting.md`](../troubleshooting.md).

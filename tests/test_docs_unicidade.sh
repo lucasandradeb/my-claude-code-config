@@ -20,4 +20,10 @@ for f in o-que-e-claude-code mcp-vs-plugin economia-de-tokens memoria; do
   assert_file_exists "$REPO/docs/concepts/$f.md"
 done
 
+assert_file_exists "$REPO/docs/troubleshooting.md"
+assert_file_exists "$REPO/CONTRIBUTING.md"
+# CONTRIBUTING precisa ensinar o fluxo de sync, senao o repo volta a divergir
+assert_contains "$(cat "$REPO/CONTRIBUTING.md" 2>/dev/null)" "make sync"
+assert_contains "$(cat "$REPO/CONTRIBUTING.md" 2>/dev/null)" "make check"
+
 exit $FAILURES
