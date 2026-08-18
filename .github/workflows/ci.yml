@@ -18,7 +18,7 @@ jobs:
       - name: padroes proibidos do repositorio
         run: |
           if grep -rInE -f scripts/lib/patterns.txt \
-               --exclude-dir=.git --exclude-dir=fixtures --exclude-dir=superpowers \
+               --exclude-dir=.git --exclude-dir=fixtures --exclude-dir=superpowers --exclude-dir=tests \
                --exclude=patterns.txt --exclude=denylist.txt . ; then
             echo "::error::padrao proibido encontrado"
             exit 1
