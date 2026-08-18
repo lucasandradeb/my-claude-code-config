@@ -26,4 +26,29 @@ assert_file_exists "$REPO/CONTRIBUTING.md"
 assert_contains "$(cat "$REPO/CONTRIBUTING.md" 2>/dev/null)" "make sync"
 assert_contains "$(cat "$REPO/CONTRIBUTING.md" 2>/dev/null)" "make check"
 
+n="$(wc -l < "$REPO/README.md" | tr -d ' ')"
+if [ "$n" -le 200 ]; then _pass "README: $n linhas"; else _fail "README: $n linhas (max 200)"; fi
+
+# Os monoliticos foram fatiados e nao podem sobreviver
+for f in GUIA_CONFIGURACAO_TIME.md EXEMPLO_CONFIGURACAO.md; do
+  if [ -f "$REPO/$f" ]; then _fail "$f ainda existe — conteudo migrou para docs/"; else _pass "$f removido"; fi
+done
+
+# O README precisa apontar para a trilha e para o catalogo
+readme="$(cat "$REPO/README.md")"
+assert_contains "$readme" "docs/setup/00-visao-geral.md"
+assert_contains "$readme" "docs/reference/"
+assert_contains "$readme" "LICENSE"
+
+# Versionamento e responsabilidade da tag git, nao de rodape por arquivo.
+# (docs/superpowers/ e .superpowers/ guardam o historico de planejamento,
+# que cita o proprio rodape como instrucao de tarefa — nao e um rodape
+# real sobrevivendo)
+hits_rodape="$(grep -rl 'Última atualização' --include='*.md' "$REPO" 2>/dev/null | grep -v 'superpowers/' | wc -l | tr -d ' ')"
+if [ "$hits_rodape" -gt 0 ]; then
+  _fail "rodape de versao por arquivo ainda existe"
+else
+  _pass "versionamento unificado em tag git"
+fi
+
 exit $FAILURES

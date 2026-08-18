@@ -343,9 +343,4 @@ Foque em:
 - Razões para escolhas técnicas específicas
 - Contexto histórico ou evolução da solução
 
----
-
-**Última atualização:** 06/02/2026
-**Versão:** 1.0.0
-
 @RTK.md
