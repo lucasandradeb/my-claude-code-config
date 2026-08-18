@@ -1,0 +1,6 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "fixtures de teste: valores falsos, por design"
+paths = ['''tests/fixtures/.*''']

@@ -1,0 +1,50 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: .gitleaks.toml
+      - name: padroes proibidos do repositorio
+        run: |
+          if grep -rInE -f scripts/lib/patterns.txt \
+               --exclude-dir=.git --exclude-dir=fixtures --exclude-dir=superpowers \
+               --exclude=patterns.txt . ; then
+            echo "::error::padrao proibido encontrado"
+            exit 1
+          fi
+          echo "nenhum padrao proibido encontrado"
+
+  shell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ludeeus/action-shellcheck@master
+        with:
+          scandir: './scripts'
+
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: lycheeverse/lychee-action@v2
+        with:
+          args: --no-progress --verbose './**/*.md'
+          fail: true
+
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y jq
+      - run: ./tests/run.sh
