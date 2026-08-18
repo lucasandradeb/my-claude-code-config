@@ -75,7 +75,8 @@ Security); o terminal ou o editor não têm a permissão concedida.
    maioria dos usos).
 2. Gere um novo token se necessário e atualize a variável de ambiente
    `GITHUB_PERSONAL_ACCESS_TOKEN`.
-3. Teste o token diretamente: `curl -H "Authorization: token SEU_TOKEN"
+3. Teste o token diretamente, lendo-o da variável de ambiente (não cole o
+   valor literal): `curl -H "Authorization: token $GITHUB_PERSONAL_ACCESS_TOKEN"
    https://api.github.com/user`.
 
 ## `install.sh` falha com `jq: command not found`
