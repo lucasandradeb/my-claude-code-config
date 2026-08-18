@@ -16,4 +16,8 @@ for f in "$REPO/docs/reference"/*.md; do
   if [ "$n" -gt 300 ]; then _fail "$(basename "$f"): $n linhas (max 300)"; else _pass "$(basename "$f"): $n linhas"; fi
 done
 
+for f in o-que-e-claude-code mcp-vs-plugin economia-de-tokens memoria; do
+  assert_file_exists "$REPO/docs/concepts/$f.md"
+done
+
 exit $FAILURES
