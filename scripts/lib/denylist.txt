@@ -1,0 +1,9 @@
+# Artefatos que nunca saem da maquina local (decisao D1 do spec).
+# Um nome por linha, sem barra. Comparado com o basename do arquivo ou
+# do diretorio da skill.
+jira-task
+olive-design-system
+clinical-metrics-analyst
+health-data-security-reviewer
+# Command de retomada deste proprio trabalho — util so para o mantenedor
+retomar-config

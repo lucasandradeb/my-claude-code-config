@@ -1,0 +1,16 @@
+# Tokens do GitHub
+ghp_[A-Za-z0-9]{20,}
+github_pat_[A-Za-z0-9_]{20,}
+# Chave da API Brave
+BSA[A-Za-z0-9_-]{20,}
+# Sessao do Metabase
+X-Metabase-Session
+# Variaveis de banco que carregavam valor real
+MYSQL_PASSWORD
+# Chave privada
+-----BEGIN [A-Z ]*PRIVATE KEY-----
+# Referencia interna que nao pode sair (decisao D1 do spec)
+[Oo][Ll][Ii][Vv]-?[Ee]
+# Caminho absoluto de usuario
+/Users/[a-z]
+/home/[a-z]

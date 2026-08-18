@@ -6,7 +6,7 @@ type: user
 
 <!-- INSTRUÇÃO: Substitua tudo abaixo com suas informações reais -->
 
-Sou [SEU NOME] ([seu.email@oliv-e.health]), engenheiro de software na Oliv-e Health.
+Sou [SEU NOME] ([seu.email@acme.example]), engenheiro de software na Acme Corp.
 
 Trabalho principalmente com: [ex: backends .NET, React Native, admin-dashboard Angular]
 

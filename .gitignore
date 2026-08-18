@@ -1,0 +1,14 @@
+# Nunca versionar: contem credenciais em texto puro
+settings.local.json
+*.local.json
+.env
+*.bak
+*.bak.*
+
+# Artefatos de sistema
+.DS_Store
+Thumbs.db
+
+# Saida de ferramenta
+node_modules/
+.cache/
