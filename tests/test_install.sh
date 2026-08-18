@@ -38,4 +38,15 @@ h2="$(jq -S . "$CLAUDE_DIR/settings.json" | shasum)"
 assert_eq "$h2" "$h1"
 
 rm -rf "$TMP"
+
+# Paridade Unix/Windows: o script PowerShell precisa cobrir os mesmos
+# passos. Sem PowerShell no CI, verificamos os marcadores.
+ps1="$(cat "$REPO/scripts/install.ps1" 2>/dev/null)"
+assert_contains "$ps1" "settings.json.bak"
+assert_contains "$ps1" "ACAO MANUAL"
+assert_contains "$ps1" "GITHUB_PERSONAL_ACCESS_TOKEN"
+assert_contains "$ps1" "BRAVE_API_KEY"
+assert_contains "$ps1" "prettier-hook.py"
+assert_contains "$ps1" "RTK.md"
+
 exit $FAILURES
