@@ -4,3 +4,7 @@ useDefault = true
 [[allowlists]]
 description = "fixtures de teste: valores falsos, por design"
 paths = ['''tests/fixtures/.*''']
+
+[[allowlists]]
+description = "docs de design (spec/plano): citam tokens de exemplo, nao segredos reais"
+paths = ['''docs/superpowers/.*''']

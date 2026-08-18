@@ -4,6 +4,7 @@
 set -euo pipefail
 
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=/dev/null  # caminho resolvido em runtime; shellcheck nao segue
 . "$REPO/scripts/lib/sanitize.sh"
 
 CLAUDE_DIR="${CLAUDE_DIR:-$HOME/.claude}"
