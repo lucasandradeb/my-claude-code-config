@@ -15,8 +15,8 @@ git clone <url-deste-repositorio>
 
 | Item | Quantidade | Referência |
 |---|---|---|
-| Plugins | 12 | [`docs/reference/plugins.md`](docs/reference/plugins.md) |
-| MCP servers | 11 | [`docs/reference/mcp-servers.md`](docs/reference/mcp-servers.md) |
+| Plugins | 16 (10 habilitados, 6 desabilitados) | [`docs/reference/plugins.md`](docs/reference/plugins.md) |
+| MCP servers | 1 | [`docs/reference/mcp-servers.md`](docs/reference/mcp-servers.md) |
 | Skills | 1 | [`docs/reference/skills.md`](docs/reference/skills.md) |
 | Agents | 2 | [`docs/reference/agents.md`](docs/reference/agents.md) |
 | Commands | 2 | [`docs/reference/commands.md`](docs/reference/commands.md) |

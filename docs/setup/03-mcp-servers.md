@@ -1,23 +1,25 @@
 # 03 — MCP Servers
 
-> Tempo estimado: 10 min
+> Tempo estimado: 5 min
 
 **Esta é a única etapa manual de toda a trilha.** O instalador copia e mescla
 tudo o que dá para automatizar; credenciais, por definição, não — ninguém além
-de você deve gerar seu token do GitHub ou sua chave da Brave.
+de você deve gerar seu token do GitHub.
 
-Para o catálogo completo dos 11 servers e o que cada um faz, veja
+O template traz **um** MCP server, o `github`. Os outros dez que existiam antes
+foram removidos porque cada MCP custa tokens de contexto em toda sessão (nomes de
+ferramentas e instruções do server) e esses não tinham uso medido ou duplicavam
+ferramentas nativas do Claude Code. O catálogo e o motivo de cada remoção estão em
 [`docs/reference/mcp-servers.md`](../reference/mcp-servers.md). Esta página cobre
 só o que exige ação sua.
 
 ## O que precisa de credencial
 
-Dos 11 servers, dois pedem uma credencial:
-
 | Server | Variável de ambiente | Obrigatório? |
 |---|---|---|
 | `github` | `GITHUB_PERSONAL_ACCESS_TOKEN` | Sim — sem ele, o MCP `github` não sobe |
-| `brave-search` | `BRAVE_API_KEY` | Opcional — remova a seção `brave-search` do seu `mcpServers` se não quiser configurar |
+
+É a única variável que o instalador checa.
 
 ## Obtendo o Personal Access Token do GitHub
 
@@ -32,17 +34,10 @@ Dos 11 servers, dois pedem uma credencial:
 6. **Copie o token imediatamente** — você não verá de novo
 7. Adicione-o à configuração (veja abaixo onde colocar)
 
-## Obtendo a chave da Brave Search API
-
-1. Acesse https://brave.com/search/api/
-2. Crie uma conta ou faça login
-3. Siga o processo de obtenção de API key
-4. Copie a chave
-
-## Onde colocar cada credencial
+## Onde colocar a credencial
 
 O arquivo mesclado pelo instalador é `~/.claude.json`, na chave `mcpServers`.
-Edite a seção do server correspondente e substitua o valor vazio:
+Edite a seção do server e substitua o valor vazio:
 
 ```json
 {
@@ -50,11 +45,6 @@ Edite a seção do server correspondente e substitua o valor vazio:
     "github": {
       "env": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "cole-seu-token-aqui"
-      }
-    },
-    "brave-search": {
-      "env": {
-        "BRAVE_API_KEY": "cole-sua-chave-aqui"
       }
     }
   }
@@ -64,26 +54,6 @@ Edite a seção do server correspondente e substitua o valor vazio:
 **Nunca commite esse arquivo com credenciais preenchidas** — ele é local, fora do
 repositório versionado.
 
-## Apontando `$WORKSPACE_DIR`
-
-Quatro servers (`filesystem`, `git`, `sqlite`, `serena`) recebem um diretório de
-trabalho como argumento. O template traz o placeholder `$WORKSPACE_DIR` — troque
-pelo caminho absoluto do projeto que você vai abrir com o Claude Code:
-
-```json
-{
-  "mcpServers": {
-    "filesystem": {
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/caminho/para/seu/projeto"]
-    }
-  }
-}
-```
-
-Se você trabalha em múltiplos projetos, repita a instalação (ou ajuste
-manualmente) apontando para cada um — o valor não é compartilhado
-automaticamente entre projetos.
-
 ## Confirmar que funcionou
 
 Reinicie o VSCode e, numa conversa nova, peça:
@@ -92,9 +62,13 @@ Reinicie o VSCode e, numa conversa nova, peça:
 Liste todos os MCP servers disponíveis e suas ferramentas
 ```
 
-Você deve ver `github` e `brave-search` na lista, sem erro de autenticação. A
-verificação completa de todos os 11 servers acontece na etapa final desta
-trilha, com `/preflight`.
+Você deve ver `github` na lista, sem erro de autenticação. A verificação final
+acontece na etapa 08, com `/preflight`.
+
+## Quer outro server?
+
+Adicione só o que você vai usar de fato — veja
+[como readicionar um server](../reference/mcp-servers.md#como-readicionar-um-server).
 
 ---
 

@@ -21,7 +21,7 @@ modificar arquivos, executar comandos, buscar informações online e muito mais.
 Você → Pergunta/Pedido → Claude Code → Analisa → Executa Ações → Responde
                                 ↓
                           MCP Servers
-                          (Filesystem, GitHub, etc.)
+                          (GitHub, etc.)
 ```
 
 O Claude Code recebe suas instruções em linguagem natural, analisa o contexto do

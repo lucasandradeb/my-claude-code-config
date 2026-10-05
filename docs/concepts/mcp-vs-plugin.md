@@ -26,8 +26,11 @@ tom) — é plugin, skill ou agent.
 
 ## Por que isso importa na prática: o efeito da análise semântica
 
-O exemplo mais concreto do repositório é o Serena MCP server, que troca busca
-textual por análise semântica de código:
+O exemplo mais concreto é o Serena MCP server, que troca busca textual por análise
+semântica de código. Ele **não vem mais no template por padrão** (cada MCP custa
+tokens em toda sessão e não houve uso medido), mas continua sendo a melhor ilustração
+da diferença. Para usá-lo, adicione o server
+([como](../reference/mcp-servers.md#como-readicionar-um-server)):
 
 ### Sem MCP server (busca textual)
 ```
@@ -49,6 +52,11 @@ Claude: Usa análise semântica
 Nenhum plugin resolveria isso — a limitação não é de comportamento, é de
 ferramenta: sem o MCP server, o Claude simplesmente não tem acesso à árvore de
 símbolos do projeto.
+
+O template ilustra o outro lado também: o plugin `serena` continua habilitado, mas
+**sem o server ele tem pouco efeito** — ele só ensina o Claude a usar ferramentas que,
+nesse caso, não existem. Plugin e MCP são independentes; habilitar um não instala o
+outro. Se você não vai adicionar o server, pode desabilitar o plugin.
 
 ## E entre plugin, skill e agent?
 

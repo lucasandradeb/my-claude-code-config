@@ -31,6 +31,13 @@ assert_contains "$mcp" "\${GITHUB_PERSONAL_ACCESS_TOKEN}"
 assert_not_contains "$mcp" "/Users/fulano"
 assert_contains "$mcp" "\$WORKSPACE_DIR"
 
+# Servidor MCP na denylist nao sai da maquina local; os demais permanecem
+mcp_deny="$(DENYLIST_FILE="$F/denylist.test.txt" sanitize_mcp "$F/mcp.dirty.json" 2>/dev/null)"
+assert_not_contains "$mcp_deny" "interno-acme"
+assert_not_contains "$mcp_deny" "mcp.interno.example"
+assert_contains "$mcp_deny" "\"github\""
+assert_contains "$mcp_deny" "\"filesystem\""
+
 # scan_secrets: 1 no arquivo sujo, 0 na saida limpa
 assert_exit_code 1 scan_secrets "$F/settings.dirty.json"
 printf '%s' "$out" > "$F/../tmp.clean.json"

@@ -31,7 +31,8 @@ define o modelo padrão para sessões abertas normalmente pelo Claude Code. Ele
 aceita tanto um alias curto (`"sonnet"`, `"opus"`, `"haiku"`) quanto um
 identificador completo como os da tabela acima.
 
-A variável de ambiente `ANTHROPIC_MODEL`, quando definida no shell, **prevalece
+A variável de ambiente `ANTHROPIC_MODEL`, quando definida (no shell ou no bloco
+`env` do settings), **prevalece
 sobre** o valor de `model` em `settings.json`. Isso é útil para:
 
 - Forçar um modelo específico numa sessão pontual sem editar o arquivo de
@@ -43,3 +44,38 @@ Se nem `ANTHROPIC_MODEL` nem `model` estiverem definidos, o Claude Code usa seu
 próprio modelo padrão interno. A ordem de precedência, do mais forte para o mais
 fraco, é: `ANTHROPIC_MODEL` (ambiente) → `model` (`settings.json`) → padrão interno
 do Claude Code.
+
+### Não fixe `ANTHROPIC_MODEL` no settings
+
+Não coloque `ANTHROPIC_MODEL` no bloco `env` do `settings.json`. Como ele
+sobrescreve o `/model`, a escolha que você faz na sessão deixa de valer, e toda
+sessão nova nasce presa ao modelo que estiver ali — inclusive um modelo antigo,
+muito depois de existir um melhor. Isso já aconteceu com o mantenedor deste
+repositório. Use a chave `model` (que o `/model` consegue sobrescrever) e reserve
+`ANTHROPIC_MODEL` para uma sessão pontual no shell ou para CI.
+
+## Roteamento por tarefa
+
+O template roda a thread principal em Opus (`"model": "opus"`) e empurra o trabalho
+mecânico para modelos mais baratos:
+
+| Tarefa | Onde roda | Como |
+|---|---|---|
+| Raciocínio, arquitetura, debug | Thread principal | Modelo padrão (`opus`) |
+| Revisão de PR | Command `/review` | `model: sonnet` no frontmatter |
+| Pesquisa (web, docs, "descubra como") | Subagente | `model: "sonnet"` ao disparar |
+| Busca pontual no código (onde está X) | Subagente | `model: "haiku"` ao disparar |
+
+Skills, commands e agents aceitam um campo `model:` no frontmatter, que define em
+qual modelo eles rodam independentemente do modelo da sessão. O agent `pr-reviewer`
+deste repositório já usa `model: sonnet`:
+
+```yaml
+---
+description: o que o command, skill ou agent faz
+model: sonnet
+---
+```
+
+A regra completa de quando delegar está no `CLAUDE.md` global (seção "Roteamento de
+modelo e subagentes"); veja [`05-claude-md.md`](../setup/05-claude-md.md).

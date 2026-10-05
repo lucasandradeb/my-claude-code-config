@@ -1,6 +1,7 @@
 ---
 allowed-tools: Bash(gh issue view:*), Bash(gh search:*), Bash(gh issue list:*), Bash(gh pr comment:*), Bash(gh pr diff:*), Bash(gh pr view:*), Bash(gh pr list:*), Bash(gh api:*)
 description: Code review de pull request
+model: sonnet
 disable-model-invocation: false
 ---
 

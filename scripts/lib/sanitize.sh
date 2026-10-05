@@ -36,9 +36,18 @@ sanitize_settings() {
 
 # Substitui todo valor de env por referencia a variavel de ambiente e troca
 # o diretorio de trabalho do autor por placeholder.
+# - servidores cujo nome esta na denylist sao removidos: MCP interno de
+#   empresa/cliente nao sai da maquina local, mesma regra dos artefatos.
 sanitize_mcp() {
-  jq '
-    with_entries(
+  local denylist_file="${DENYLIST_FILE:-$_LIB_DIR/denylist.txt}"
+  local denied="[]"
+  if [ -f "$denylist_file" ]; then
+    denied="$(grep -vE '^[[:space:]]*(#|$)' "$denylist_file" | jq -R . | jq -s .)"
+  fi
+
+  jq --argjson denied "$denied" '
+    with_entries(select(.key as $k | $denied | index($k) | not))
+    | with_entries(
       .value |= (
         (if (.env? | type) == "object"
          then .env |= with_entries(.value = "${" + .key + "}")

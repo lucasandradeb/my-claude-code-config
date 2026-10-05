@@ -9,25 +9,32 @@ que esse arquivo faz e adaptá-lo ao seu contexto.
 ## O que o `CLAUDE.md` instalado faz
 
 O Claude Code carrega esse arquivo automaticamente no início de toda conversa,
-em qualquer projeto, e aplica as instruções nele contidas. O `CLAUDE.md` deste
+em qualquer projeto, e aplica as instruções nele contidas. Como ele entra no
+contexto de **toda** mensagem, é propositalmente curto (~3,5 mil caracteres): a
+versão anterior, com ~18 mil, trazia exemplos longos de TypeScript, Python e C#
+que o modelo já conhece e que custavam tokens em toda sessão. O `CLAUDE.md` deste
 repositório define:
 
-- **Filosofia de trabalho** — explicação antes da ação, código legível antes de
-  conciso, segurança nunca comprometida por velocidade.
-- **Diretrizes por linguagem** — convenções de TypeScript/React, Python e C#
-  usadas pelo time (estrutura de componentes, type hints, nomenclatura, etc.).
-- **Segurança** — validação de entrada, tratamento de credenciais, vulnerabilidades
-  comuns a evitar em qualquer linguagem.
-- **Convenções de git** — formato de commit, nomenclatura de branch, o que uma
-  PR precisa conter.
-- **Insights educacionais** — formato usado para explicar trade-offs técnicos.
+- **Comunicação** — português brasileiro, objetivo, sem emojis; confirmar antes de
+  ação destrutiva ou em produção.
+- **Roteamento de modelo e subagentes** — thread principal em Opus para
+  raciocínio; pesquisa em subagente Sonnet; busca pontual em subagente Haiku;
+  revisão de PR via `/review` (Sonnet). Veja
+  [`modelos.md`](../reference/modelos.md#roteamento-por-tarefa).
+- **Gestão de contexto** — uma tarefa por sessão, documento de estado para frentes
+  longas, leitura ampla delegada a subagentes, preferência por CLIs a MCPs
+  equivalentes.
+- **Código** — princípios curtos por stack (TypeScript/React, .NET, Python).
+- **Segurança** — nunca commitar segredos, queries parametrizadas, dados sensíveis
+  fora de artefatos e memória.
+- **Git** — formato de commit, nomenclatura de branch, commit e push só sob pedido.
 
 ## Como confirmar que carregou
 
 Numa conversa nova, pergunte:
 
 ```
-Quais são suas diretrizes de desenvolvimento para TypeScript e React?
+Como você deve rotear pesquisa e busca pontual entre subagentes?
 ```
 
 O Claude deve responder seguindo o conteúdo do `CLAUDE.md` — se a resposta não

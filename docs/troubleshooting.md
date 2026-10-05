@@ -20,7 +20,9 @@ instalado.
 4. Confirme se os tokens/keys de que o server depende estão definidos
    (variáveis de ambiente — veja [03 — MCP Servers](setup/03-mcp-servers.md)).
 5. Teste o server manualmente, por exemplo `npx -y
-   @modelcontextprotocol/server-memory`.
+   @modelcontextprotocol/server-github`. Se você readicionou algum outro server
+   ([como](reference/mcp-servers.md#como-readicionar-um-server)), rode o comando
+   dele direto no terminal para ver o erro.
 
 ## Plugin não carrega
 
@@ -53,7 +55,7 @@ da conversa).
 
 ## Erro de permissão no macOS
 
-**Sintoma:** "Operation not permitted" ao usar o MCP filesystem ou ao rodar
+**Sintoma:** "Operation not permitted" ao acessar uma pasta protegida pelo terminal ou ao rodar
 `scripts/install.sh` / `scripts/sync.sh`.
 
 **Causa:** macOS restringe acesso a pastas do usuário por padrão (Privacy &

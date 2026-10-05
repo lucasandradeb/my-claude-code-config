@@ -52,7 +52,7 @@ Você: "Explique como funciona a autenticação em UserService.cs"
 Claude: [Lê apenas arquivo específico]
 ```
 
-### 3. Use o Memory Server
+### 3. Use a memória para não re-explicar contexto
 
 ❌ **Ruim**: re-explicar contexto sempre
 ```
@@ -66,7 +66,7 @@ Você: "O projeto usa arquitetura CQRS com MediatR..." [repete]
 ```
 [Conversa 1]
 Você: "Lembre: projeto usa CQRS com MediatR"
-Claude: [Salva no memory server]
+Claude: [Salva um arquivo na memória do projeto]
 
 [Conversa 2]
 Você: "Adicione novo command"
@@ -84,10 +84,11 @@ Você: "Qual a assinatura do método processPayment?"
 Claude: [Lê arquivo de 500 linhas completo]
 ```
 
-✅ **Bom**: usar análise semântica (Serena)
+✅ **Bom**: ler só o trecho necessário (`Grep` e leitura por faixa de linhas; com o
+Serena instalado, análise semântica)
 ```
 Você: "Qual a assinatura do método processPayment?"
-Claude: [Usa Serena para buscar apenas o método]
+Claude: [Busca só o método, sem ler o arquivo todo]
 ```
 
 ### 5. Evite re-reads
@@ -139,8 +140,40 @@ Claude: [Mantém contexto do módulo de auth]
 |--------|---------------------|------------------------|
 | Buscar arquivo por nome | `Glob` | `Read` + tentativa e erro |
 | Buscar texto em código | `Grep` | `Read` em vários arquivos |
-| Entender estrutura de classe | `Serena` (get_symbols_overview) | `Read` arquivo completo |
-| Renomear variável | `Serena` (rename_symbol) | `Edit` manual em vários lugares |
+| Entender estrutura de classe | `Grep` por declarações, ou Serena (`get_symbols_overview`) se instalado | `Read` arquivo completo |
+| Renomear variável | Serena (`rename_symbol`) se instalado; senão `Grep` + `Edit` | `Edit` manual sem varrer todos os usos |
+
+## Lições medidas de um caso real
+
+Números do mantenedor deste repositório, medidos em 30 dias de uso (268 sessões).
+São um exemplo, não uma média: o seu perfil será diferente, mas o padrão costuma se
+repetir.
+
+| Medição | Valor |
+|---|---|
+| Peso das 5 maiores sessões | 60% de todo o contexto lido no período |
+| Sessões com 1.600+ mensagens | Chegaram a 640 mil tokens de contexto |
+| Contexto fixo antes da primeira mensagem | ~72 mil tokens (mediana) |
+
+Cada mensagem reenvia o histórico da sessão, então o custo cresce com o tamanho dela,
+não só com o que você pede. As lições:
+
+1. **Sessão curta**: uma tarefa por sessão, `/clear` ao terminar e `/compact` quando
+   o contexto passar de ~150 mil tokens.
+2. **Documento de handoff** para frentes longas: grave o estado num arquivo do
+   repositório e retome lendo esse arquivo, em vez de arrastar uma sessão gigante.
+3. **Pode MCPs e plugins sem uso**: cada um entra no contexto fixo de toda sessão
+   (nomes de ferramentas, instruções, skills). Veja
+   [`mcp-servers.md`](../reference/mcp-servers.md#removidos-e-por-quê) e
+   [`plugins.md`](../reference/plugins.md).
+4. **Um único estilo de saída**: dois estilos concorrentes (por exemplo, o
+   explicativo e o `caveman`) brigam entre si e aumentam tokens de saída, que
+   custam cerca de 5x os de entrada.
+5. **Subagentes para leitura ampla**: o subagente lê muito e devolve só o resumo,
+   preservando o contexto da thread principal. Pode rodar em modelo mais barato —
+   veja [`modelos.md`](../reference/modelos.md#roteamento-por-tarefa).
+6. **Meça o custo fixo com `/context`**: é o jeito de ver o que está pesando antes
+   da primeira mensagem e de confirmar que uma poda funcionou.
 
 ## RTK — Rust Token Killer
 

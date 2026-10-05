@@ -1,12 +1,25 @@
 {
   "github": {
     "command": "npx",
-    "args": ["-y", "@modelcontextprotocol/server-github"],
-    "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_aaaabbbbccccddddeeeeffff0000" }
+    "args": [
+      "-y",
+      "@modelcontextprotocol/server-github"
+    ],
+    "env": {
+      "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_aaaabbbbccccddddeeeeffff0000"
+    }
   },
   "filesystem": {
     "command": "npx",
-    "args": ["-y", "@modelcontextprotocol/server-filesystem", "/Users/fulano/Projetos"],
+    "args": [
+      "-y",
+      "@modelcontextprotocol/server-filesystem",
+      "/Users/fulano/Projetos"
+    ],
     "env": {}
+  },
+  "interno-acme": {
+    "type": "http",
+    "url": "https://mcp.interno.example/mcp"
   }
 }
