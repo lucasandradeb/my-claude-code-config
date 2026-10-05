@@ -66,13 +66,10 @@ done
 echo
 echo "  ACAO MANUAL:"
 missing=0
-for var in GITHUB_PERSONAL_ACCESS_TOKEN; do
-  eval "val=\${$var:-}"
-  if [ -z "$val" ]; then
-    echo "    - $var nao definido"
-    missing=$((missing + 1))
-  fi
-done
+if [ -z "${GITHUB_PERSONAL_ACCESS_TOKEN:-}" ]; then
+  echo "    - GITHUB_PERSONAL_ACCESS_TOKEN nao definido"
+  missing=1
+fi
 [ "$missing" -eq 0 ] && echo "    - nenhuma"
 echo "    ver docs/setup/03-mcp-servers.md"
 echo
