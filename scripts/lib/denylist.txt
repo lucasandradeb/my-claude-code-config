@@ -7,3 +7,7 @@ clinical-metrics-analyst
 health-data-security-reviewer
 # Command de retomada deste proprio trabalho — util so para o mantenedor
 retomar-config
+# Skills sincronizadas da conta claude.ai (org/conta) — conteudo de terceiros
+synced
+# Servidor MCP interno (removido de config/mcp-servers.template.json)
+oliv-e

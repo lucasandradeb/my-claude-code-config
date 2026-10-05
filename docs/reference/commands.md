@@ -14,6 +14,7 @@ Arquivo `.md` em `commands/`, com frontmatter YAML:
 ---
 description: O que o command faz — aparece na lista de comandos disponíveis
 allowed-tools: lista de ferramentas permitidas quando o command roda
+model: sonnet   # opcional — modelo em que o command roda
 disable-model-invocation: false
 ---
 
@@ -31,7 +32,9 @@ arquivo.
 Local: `commands/preflight.md`.
 
 Testa se os MCPs que a sessão vai usar (GitHub, Jira/Atlassian, Serena, Slack)
-estão autenticados e funcionando, e reporta o status em tabela. Use no início de
+estão autenticados e funcionando, e reporta o status em tabela. Serena e Slack só
+passam se você os configurou — o template traz apenas o `github`, então
+`NÃO CONFIGURADO` nessas linhas é esperado. Use no início de
 qualquer sessão longa que dependa desses MCPs — evita descobrir um token expirado
 no meio do trabalho, depois de já ter investido tempo nele.
 
@@ -40,7 +43,8 @@ no meio do trabalho, depois de já ter investido tempo nele.
 Local: `commands/review.md`.
 
 Faz code review completo de uma pull request: busca o diff, verifica testes,
-identifica problemas e posta comentários. Já paraleliza internamente, então é a
+identifica problemas e posta comentários. Roda em Sonnet (`model: sonnet` no
+frontmatter), então não consome Opus em uma tarefa de leitura e comentário. Já paraleliza internamente, então é a
 ferramenta certa para revisar **uma** PR — para 2 ou mais PRs ao mesmo tempo, use
 o agente `pr-reviewer` (veja [`agents.md`](agents.md#pr-reviewer)), que dispara uma
 instância por PR em paralelo. Segue um estilo de comunicação específico: tom

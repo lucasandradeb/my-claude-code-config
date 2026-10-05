@@ -74,7 +74,7 @@ foreach ($kind in @('skills','agents','commands')) {
 Write-Host ''
 Write-Host '  ACAO MANUAL:'
 $missing = 0
-foreach ($v in @('GITHUB_PERSONAL_ACCESS_TOKEN','BRAVE_API_KEY')) {
+foreach ($v in @('GITHUB_PERSONAL_ACCESS_TOKEN')) {
   if (-not [Environment]::GetEnvironmentVariable($v)) {
     Write-Host "    - $v nao definido"; $missing++
   }

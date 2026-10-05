@@ -45,7 +45,9 @@ ps1="$(cat "$REPO/scripts/install.ps1" 2>/dev/null)"
 assert_contains "$ps1" "settings.json.bak"
 assert_contains "$ps1" "ACAO MANUAL"
 assert_contains "$ps1" "GITHUB_PERSONAL_ACCESS_TOKEN"
-assert_contains "$ps1" "BRAVE_API_KEY"
+# brave-search saiu do template: nenhum instalador deve cobrar a chave
+assert_not_contains "$ps1" "BRAVE_API_KEY"
+assert_not_contains "$(cat "$REPO/scripts/install.sh")" "BRAVE_API_KEY"
 assert_contains "$ps1" "prettier-hook.py"
 assert_contains "$ps1" "RTK.md"
 

@@ -9,11 +9,14 @@ skills/agents/commands copiados e memória configurada.
 ## O que você ganha ao final
 
 - **Claude Code** rodando no VSCode, autenticado com sua conta Anthropic.
-- **11 MCP servers** — acesso a arquivos, git, GitHub, busca na web, análise
-  semântica de código e mais. Só um deles exige uma etapa manual (credenciais).
-- **12 plugins** — comportamentos especializados: TDD, revisão de PR, design de
-  frontend, modo de economia de tokens, entre outros.
-- **`CLAUDE.md` global** — instruções persistentes que valem em qualquer projeto.
+- **1 MCP server** (`github`) — o único mantido de propósito: cada MCP custa
+  tokens de contexto em toda sessão, então o template só traz o que é usado. Ele
+  exige uma etapa manual (token do GitHub).
+- **16 entradas de plugin** — 10 habilitadas (TDD, revisão de PR, design de
+  frontend, modo de economia de tokens, entre outros) e 6 explicitamente
+  desabilitadas por falta de uso ou duplicidade.
+- **`CLAUDE.md` global enxuto** — instruções persistentes (~3,5 mil caracteres)
+  que valem em qualquer projeto, incluindo o roteamento de modelo por tarefa.
 - **Skills, agents e commands** — fluxos de trabalho prontos, incluindo o
   `/preflight` que fecha esta trilha.
 - **Memória por projeto** — o Claude lembra decisões e convenções entre sessões.

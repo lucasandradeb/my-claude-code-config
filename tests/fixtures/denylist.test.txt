@@ -1,0 +1,2 @@
+# Denylist de teste: artefatos e servidores MCP internos
+interno-acme

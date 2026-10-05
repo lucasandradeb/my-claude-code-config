@@ -21,7 +21,7 @@ sessões usa e reporta o status em tabela:
 |-----------------|--------|---------------------------------|
 | GitHub          | OK     |                                 |
 | Atlassian/Jira  | OK     |                                 |
-| Serena (LSP)    | OK     |                                 |
+| Serena (LSP)    | NÃO CONFIGURADO | — (opcional)           |
 | Slack           | NÃO CONFIGURADO | —                      |
 ```
 
@@ -33,19 +33,22 @@ sessões usa e reporta o status em tabela:
 | **FALHOU** | O MCP está configurado mas a chamada de teste deu erro | Leia o "Detalhe" — geralmente é token expirado ou credencial errada; revise a etapa [03 — MCP Servers](03-mcp-servers.md) |
 | **NÃO CONFIGURADO** | O MCP não está no seu `mcpServers` | Normal se você optou por não configurar aquele server (ex: Slack, se seu time não usa) |
 
-`/preflight` cobre GitHub, Atlassian/Jira, Serena e Slack — não os 11 servers do
-catálogo completo. Para os demais (filesystem, memory, brave-search, etc.),
-confirme manualmente como descrito na etapa 03: peça ao Claude para listar os
-MCP servers disponíveis e suas ferramentas.
+`/preflight` cobre GitHub, Atlassian/Jira, Serena e Slack. O template só traz o
+server `github`; os demais só aparecem na tabela se você os adicionou. A linha do
+Serena (LSP) depende do server do Serena, que é opcional (veja
+[`mcp-servers.md`](../reference/mcp-servers.md#como-readicionar-um-server)) —
+`NÃO CONFIGURADO` ali é esperado numa instalação padrão. Para confirmar o que está
+carregado de fato, peça ao Claude para listar os MCP servers disponíveis, ou rode
+`/context` para ver o custo de cada um.
 
 ## Checklist final
 
 Além do `/preflight`, confirme rapidamente:
 
-- **Plugins**: Command Palette → "Claude: List Installed Plugins" mostra os 12
-  (etapa 04).
-- **`CLAUDE.md`**: pergunte "quais são suas diretrizes de desenvolvimento para
-  TypeScript e React?" e confira se a resposta segue o arquivo (etapa 05).
+- **Plugins**: Command Palette → "Claude: List Installed Plugins" mostra os 10
+  habilitados (etapa 04).
+- **`CLAUDE.md`**: pergunte "como você deve rotear pesquisa e busca pontual entre
+  subagentes?" e confira se a resposta segue o arquivo (etapa 05).
 - **Memória**: pergunte algo que só está na sua pasta de memória do projeto e
   confirme que o Claude responde sem você repetir a informação (etapa 07).
 

@@ -5,95 +5,38 @@ projeto usa Clean Architecture", "a API de autenticação roda na porta X", "nã
 esqueça de rodar o docker antes". Com memória, o Claude já sabe tudo isso antes de
 você falar.
 
-O Memory Server merece destaque especial pela sua importância em projetos de
-longo prazo.
+Este repositório usa a **memória nativa do Claude Code**, baseada em arquivos
+Markdown por projeto (descrita abaixo). O MCP server `memory` (knowledge graph) saiu
+do template: ele duplicava a memória nativa e custava tokens de contexto em toda
+sessão sem uso medido — veja [`mcp-servers.md`](../reference/mcp-servers.md#removidos-e-por-quê).
 
-## Como funciona
+## Por que memória em arquivos basta
 
-O Memory Server cria um **knowledge graph** (grafo de conhecimento) estruturado:
+- O índice `MEMORY.md` é carregado em toda sessão, então o Claude sabe o que
+  existe sem ferramenta extra.
+- Os arquivos são texto: você lê, edita e versiona como quiser.
+- Pedir "lembre que X" na conversa já cria o arquivo correspondente.
 
-```
-┌──────────────────────────────────────────────┐
-│           KNOWLEDGE GRAPH                     │
-├──────────────────────────────────────────────┤
-│                                                │
-│  [UserService] ─────"usa"────→ [Repository]   │
-│       │                             │         │
-│       │                             │         │
-│    "implementa"                "persiste"     │
-│       │                             │         │
-│       ↓                             ↓         │
-│  [CQRS Pattern]              [PostgreSQL]     │
-│                                                │
-│  Observações:                                 │
-│  - UserService: "Validação com FluentVal"     │
-│  - Repository: "Usa Dapper para queries"      │
-└──────────────────────────────────────────────┘
-```
+## Tipos de informação que valem a pena guardar
 
-## Tipos de informação armazenada
-
-1. **Arquitetura do projeto**
-   ```
-   Entidade: "Sistema de Autenticação"
-   Tipo: Architecture
-   Observações:
-     - Usa JWT para tokens
-     - Refresh tokens armazenados no Redis
-     - Rate limiting com 5 tentativas
-   ```
-
-2. **Decisões técnicas**
-   ```
-   Entidade: "Escolha do ORM"
-   Tipo: Decision
-   Observações:
-     - Escolhemos Dapper ao invés de EF Core
-     - Razão: Performance em queries complexas
-     - Data: Janeiro 2026
-   ```
-
-3. **Convenções do time**
-   ```
-   Entidade: "Padrão de Nomenclatura"
-   Tipo: Convention
-   Observações:
-     - Services terminam com "Service"
-     - Repositories terminam com "Repository"
-     - DTOs em pasta separada /DTOs
-   ```
-
-## Comandos úteis
-
-```
-# Criar memória
-"Lembre que o UserService usa injeção de dependência"
-
-# Buscar memória
-"Como está estruturado o sistema de auth?"
-
-# Atualizar memória
-"Atualize: agora usamos Redis para cache de usuários"
-
-# Ver grafo completo
-"Mostre todo o knowledge graph do projeto"
-```
+1. **Arquitetura do projeto** — "A API de auth usa JWT; refresh tokens ficam no
+   Redis; rate limiting de 5 tentativas."
+2. **Decisões técnicas** — "Escolhemos Dapper em vez de EF Core por performance em
+   queries complexas."
+3. **Convenções do time** — "Services terminam com `Service`; DTOs ficam em `/DTOs`."
 
 ## Benefícios em projetos reais
 
-1. **Onboarding de novos desenvolvedores** — Claude explica arquitetura usando
-   memórias e entende convenções do time automaticamente.
+1. **Onboarding de novos desenvolvedores** — Claude explica a arquitetura e entende
+   as convenções do time automaticamente.
 2. **Consistência de código** — lembra padrões usados anteriormente e sugere
    implementações alinhadas com o projeto.
-3. **Documentação viva** — o conhecimento não fica desatualizado; evolui junto
-   com o código.
-4. **Continuidade entre conversas** — não precisa re-explicar arquitetura,
-   mantém contexto de decisões passadas.
+3. **Continuidade entre conversas** — não precisa re-explicar arquitetura nem
+   decisões passadas.
 
 ## Estrutura de arquivos na prática
 
-Além do Memory Server (knowledge graph via MCP), este repositório também usa
-memória baseada em arquivos Markdown por projeto:
+A memória fica em arquivos Markdown por projeto:
 
 ```
 ~/.claude/projects/<nome-do-projeto>/memory/

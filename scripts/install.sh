@@ -66,7 +66,7 @@ done
 echo
 echo "  ACAO MANUAL:"
 missing=0
-for var in GITHUB_PERSONAL_ACCESS_TOKEN BRAVE_API_KEY; do
+for var in GITHUB_PERSONAL_ACCESS_TOKEN; do
   eval "val=\${$var:-}"
   if [ -z "$val" ]; then
     echo "    - $var nao definido"

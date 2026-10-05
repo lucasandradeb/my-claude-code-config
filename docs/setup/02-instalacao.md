@@ -35,7 +35,7 @@ O instalador imprime uma linha por artefato copiado ou mesclado:
 ```
   backup    settings.json                      -> settings.json.bak.20260818120000
   merge     settings.json                      customizacoes preservadas
-  merge     mcpServers (11)
+  merge     mcpServers (1)
   copiar    CLAUDE.md
   copiar    RTK.md
   copiar    hooks/prettier-hook.py
@@ -45,7 +45,6 @@ O instalador imprime uma linha por artefato copiado ou mesclado:
 
   ACAO MANUAL:
     - GITHUB_PERSONAL_ACCESS_TOKEN nao definido
-    - BRAVE_API_KEY nao definido
     ver docs/setup/03-mcp-servers.md
 
   Proximo passo: abra o Claude Code e rode /preflight

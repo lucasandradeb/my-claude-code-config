@@ -20,8 +20,9 @@ Hooks rodam **sempre**, sem confirmação — só adicione hooks em que você co
 
 ### `enabledPlugins`
 
-Mapa `"plugin@marketplace": true` com os 12 plugins habilitados por padrão. Lista
-completa e o que cada um faz: [`plugins.md`](plugins.md).
+Mapa `"plugin@marketplace": true|false` com 16 entradas: 10 plugins habilitados e 6
+explicitamente desabilitados (zero uso medido, duplicatas ou conflito de estilo de
+saída). Lista completa, status e motivos: [`plugins.md`](plugins.md).
 
 ### `extraKnownMarketplaces`
 
@@ -41,9 +42,13 @@ para quando está genuinamente bloqueado.
 
 ### `model`
 
-Define o modelo padrão da sessão. Aceita um alias curto (`"haiku"`, `"sonnet"`,
-`"opus"` — resolvido para a versão atual de cada família) ou um identificador
-completo de modelo. Detalhes e identificadores atuais: [`modelos.md`](modelos.md).
+Define o modelo padrão da sessão. O template usa `"opus"`: a thread principal fica
+no modelo mais capaz e o trabalho mecânico é roteado para modelos mais baratos via
+subagentes e `model:` no frontmatter (veja
+[`modelos.md`](modelos.md#roteamento-por-tarefa)). Aceita um alias curto (`"haiku"`,
+`"sonnet"`, `"opus"` — resolvido para a versão atual de cada família) ou um
+identificador completo de modelo. Detalhes e identificadores atuais:
+[`modelos.md`](modelos.md).
 
 ### `effortLevel`
 
@@ -60,7 +65,10 @@ comportamento.
 
 ### `env`
 
-O template **não** tem bloco `env`. Variável de ambiente com segredo (token de
+O template **não** tem bloco `env`. Em particular, não fixe `ANTHROPIC_MODEL` aqui:
+ele sobrescreve o `/model` e prende sessões novas num modelo antigo (veja
+[`modelos.md`](modelos.md#não-fixe-anthropic_model-no-settings)). Variável de
+ambiente com segredo (token de
 API, senha, chave privada) não pertence a um arquivo versionado — qualquer pessoa
 com acesso ao repositório passaria a ter acesso ao segredo, e o histórico do git
 guarda a chave para sempre mesmo que ela seja removida depois. Segredos vão em
