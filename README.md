@@ -20,6 +20,7 @@ git clone <url-deste-repositorio>
 | Skills | 1 | [`docs/reference/skills.md`](docs/reference/skills.md) |
 | Agents | 2 | [`docs/reference/agents.md`](docs/reference/agents.md) |
 | Commands | 2 | [`docs/reference/commands.md`](docs/reference/commands.md) |
+| Recomendações (skills da Anthropic, conectores, plugins) | — | [`docs/reference/recomendacoes.md`](docs/reference/recomendacoes.md) |
 | `CLAUDE.md` | — | [`docs/setup/05-claude-md.md`](docs/setup/05-claude-md.md) |
 | RTK (Rust Token Killer) | — | [`docs/concepts/economia-de-tokens.md`](docs/concepts/economia-de-tokens.md) |
 
@@ -34,7 +35,7 @@ git clone <url-deste-repositorio>
 | [04 · Plugins](docs/setup/04-plugins.md) | [Commands](docs/reference/commands.md) | |
 | [05 · CLAUDE.md](docs/setup/05-claude-md.md) | [Modelos](docs/reference/modelos.md) | |
 | [06 · Skills, agents, commands](docs/setup/06-skills-agents-commands.md) | [Settings](docs/reference/settings.md) | |
-| [07 · Memória](docs/setup/07-memoria.md) | | |
+| [07 · Memória](docs/setup/07-memoria.md) | [Recomendações](docs/reference/recomendacoes.md) | |
 | [08 · Verificação](docs/setup/08-verificacao.md) | | |
 
 [Solução de problemas](docs/troubleshooting.md) reúne os erros mais comuns de instalação e sincronização.

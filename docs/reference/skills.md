@@ -41,3 +41,11 @@ nunca sozinha. Transforma um requisito vago em uma spec estruturada (o que
 construir e como saber que está correto) antes de partir para implementação.
 Indicada para projetos novos ou features com escopo não trivial, onde "pronto"
 precisa de uma definição objetiva antes de começar a codar.
+
+## Skills recomendadas, fora deste repositório
+
+As skills oficiais da Anthropic (`docx`, `pdf`, `pptx`, `xlsx`, `skill-creator`,
+`mcp-builder` e outras) não são distribuídas aqui: algumas têm licença
+proprietária, e todas são instaladas pelo marketplace oficial. Veja a lista,
+os comandos de instalação e quais o mantenedor usa em
+[Recomendações](recomendacoes.md).
